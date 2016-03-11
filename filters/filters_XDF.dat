@@ -1,0 +1,18 @@
+# It contains the filters to be used when calculating only photmetric models
+
+# The possible units that can be used are: Jy, milliJy, microJy, nanoJy
+# Alternatively one can pass a conversion factor to convert the fluxes in the
+# catalogue into [erg s^-1 cm^-2 Hz^-1] -----> units:value:<conversion factor>
+units:nanoJy
+
+object_ID:colName:ID
+
+index:208       label:WFC_F435W
+index:209       label:WFC_F606W
+index:210       label:WFC_F775W
+index:211       label:WFC_F814W
+index:212       label:WFC_F850W
+index:214       label:WFC3_F105W
+index:215       label:WFC3_F125W
+index:216       label:WFC3_F140W
+index:217       label:WFC3_F160W
