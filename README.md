@@ -1,4 +1,4 @@
-[![Join the chat at https://gitter.im/jacopo-chevallard/BEAGLE-JWST-GTO](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/fossasia/open-event-webapp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/jacopo-chevallard/BEAGLE-JWST-GTO](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jacopo-chevallard/BEAGLE-JWST-GTO?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 # BEAGLE-JWST-GTO
 
