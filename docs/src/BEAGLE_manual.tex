@@ -1,0 +1,1057 @@
+\documentclass[a4paper,11pt,twoside]{article}
+
+%%%% PACKAGES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Generic typesetting
+\usepackage[english]{babel}
+\usepackage{makeidx}
+
+\usepackage[T1]{fontenc}
+\usepackage{ae,aecompl}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+% Tables and arrays
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{threeparttable}
+\usepackage{multirow}
+
+\usepackage{paralist}
+\setlength{\plitemsep}{5pt} % Space between successive items.
+\setlength{\pltopsep}{5pt} % Space between first item and preceding paragraph.
+
+% Fancy verbatim
+\usepackage{fancyvrb}
+
+% Astronmy macros
+\usepackage{aas_macros}
+\usepackage{natbib}
+
+% Font set
+%\usepackage{pslatex}
+\usepackage{scalefnt}
+\usepackage{letltxmacro}
+
+%\usepackage{underscore}
+
+% Code formatting
+\usepackage{minted}
+\usemintedstyle{default}
+
+% Margins
+\usepackage[left=0.75in,right=0.75in,top=1in,bottom=1.1in]{geometry}
+
+% Hyperlinks (should be last)
+\usepackage{varioref}
+\usepackage[ colorlinks=true,
+		citecolor=blue,
+             bookmarks=true,
+             pdftitle={BEAGLE User's Guide},
+             pdfsubject={BEAGLE},
+             pdfkeywords={BEAGLE, SED fitting, photometry,
+                          population synthesis},
+             pdfauthor={Jacopo Chevallard} ]{hyperref}
+             
+%%%% COMMANDS & MACROS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{00-commands}
+%\include{autolog/autologdefs}
+
+%%%% DOCUMENT START %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeindex
+\begin{document}
+   \selectlanguage{english}
+
+   % Title page
+   \include{01-titlepage}
+   % Table of contents
+   \cleardoublepage
+   \tableofcontents
+
+
+%%%% INTRODUCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+
+\subsection{About This Guide}
+
+\subsection{Getting BEAGLE}
+
+\subsection{Main features}
+
+%%%% GETTING STARTED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Getting started}
+
+{\bf add cosmological par setting!}
+
+In this section, we will explain step by step how to get the RAMSES
+package and install it, then how to perform a simple test to check the
+installation.
+
+\subsection{Preparing to the compilation}
+
+To compile \beagle\ you need the following software to be installed on your machine:
+
+\begin{itemize}
+	\item \depend{\href{https://cmake.org}{CMake}}, version $\ge$ 2.8 (to check the version on your machine type \bashinline{cmake --version})
+	\item \depend{\href{https://gcc.gnu.org}{GCC}}, version $\ge$ 4.8 (to check the version on your machine type \bashinline{gcc --version})
+	\item \depend{\href{http://www.open-mpi.org}{Open MPI}}
+\end{itemize}
+
+All the above packages are well documented and widely used, so with little effort you should be able to install them on your machine.
+
+\subsubsection{Mac OS}
+
+On a Mac OS $>= 10.9$ you should install some \depend{Xcode tools} which are not installed by default. For this it should be enough to run the following command from a shell 
+\begin{bashcode}
+xcode-select --install
+\end{bashcode}
+
+Normally, the installation script of \beagle\ takes care of installing all the other dependencies. However, the installation of \depend{OpenBLAS} on a Mac OS may fail. To prevent failures, you may want to install \cmd{OpenBLAS} by using \suggest{\href{http://brew.sh}{Homebrew}} before installing \beagle. For this, just type
+\begin{bashcode}
+brew tap homebrew/science
+brew install homebrew/science/openblas
+\end{bashcode}
+The above command will install OpenBLAS in \dir{/usr/local/opt/openblas}. To allow \beagle\ to find OpenBLAS you can copy (or symlink) the installed files into the \beagle\ installation directory, for instance by typing
+\begin{bashcode}
+cp /usr/local/opt/openblas/lib/* install_dir/lib
+cp /usr/local/opt/openblas/include/* install_dir/include
+\end{bashcode}
+	
+Once \cmd{Homebrew} is installed, you can use it to install the above dependencies with the following commands:
+
+\begin{itemize}
+	
+\item \depend{CMake}:
+\begin{bashcode}
+brew install cmake
+\end{bashcode}
+	
+\item \depend{GCC}:
+\begin{bashcode}
+brew install gcc --without-multilib --with-all-languages
+\end{bashcode}
+	
+\item \depend{Open MPI}:
+\begin{bashcode}
+brew install open-mpi --enable-mpi-fortran=all
+ \end{bashcode}
+	
+\end{itemize}
+
+\subsection{Obtaining the package}
+
+\subsection{Compiling the code}
+
+In this \dir{bin/} directory, you will find a Makefile. The first thing
+to do is to edit the Makefile and modify the two variables \cflag{F90}
+and \cflag{FFLAGS}. Several examples corresponding to different Fortran
+compilers are given. The default values are:
+
+\begin{Prompt}
+F90 = gfortran
+FFLAGS = -x f95-cpp-input $(DEFINES) -DWITHOUTMPI
+\end{Prompt}
+
+\subsection{Setting the environment variables}
+
+In order to ease the file I/O we suggest to set the following environment variables. Besides making the code I/O simpler, and keep the different files organised, the advantage of using environment variables is that one can use the same parameter files on different machines, where each machine will have its own environment variables settings.
+
+\begin{itemize}
+	\item \env{BEAGLE\_ROOT}: 
+	\item \env{BEAGLE\_PARAM\_DIR}:
+	\item \env{BEAGLE\_DATA}: folder containing the data, such as spectra and photometric
+  catalogues, that will be fitted with \beagle.
+	\item \env{BEAGLE\_DUST}: folder containing the dust attenuation/extinction curves and dust emission
+  templates.
+	\item \env{BEAGLE\_FILTERS}: folder containing the definition of the transmission curves of the
+  photometric filters, the routine to add new filters, and the filters
+parameter file associated with a photometric catalogue.
+	\item \env{BEAGLE\_RESULTS}: folder containing the output of \beagle.
+	\item \env{BEAGLE\_SF\_CHE}: folder containing the star formation and chemical enrichment histories
+  from galaxy formation models, e.g. hydrodynamic simulations and semi-analytic
+models.
+	\item \env{BEAGLE\_TEMPLATES}: folder containing the stellar population synthesis and photo-ionization
+  templates used in BEAGLE.
+  \item \env{BEAGLE\_TEST\_FILES}: folder containing the stellar population synthesis and photo-ionization
+  templates used in BEAGLE.
+  \item \env{FILTERS}: binary file containing the transmission functions of the photometric filters. 
+
+\end{itemize}
+
+A `typical' \beagle\ setting would therefore create the folder structure below, 
+
+\begin{minted}{bash}
+root
+|----data
+     |----HUDF
+     |----SDSS
+     |----CALIFA
+     |----COSMOS
+|----dust
+     |----attenuation
+     |----emission
+|----filters
+|----results
+     |----HUDF
+          |----Model_1
+          |----Model_2
+          |----Model_3
+     |----SDSS
+          |----Model_1
+          |----Model_2
+|----sf_che             
+     |----Eagle
+     |----Illustris
+     |----deLucia_Blaizot
+     |----Durham
+|----templates
+     |----BC03
+     |----M05
+     |----FSPS 
+\end{minted}     
+
+while the environment variables can be set to point to the directories above by adding to the shell configuration file the lines below (for a bash shell, an example for a C-shell is included in the GitHub repository)
+
+\inputminted[breaklines]{bash}{{/Users/jchevall/Coding/BEAGLE/scripts/BEAGLE_env_variable.bash}}   
+
+
+\subsection{Running the code}
+
+\clearpage
+%%%% PARAMETER FILE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Parameter files}
+
+In this section we illustrate the meaning of the different keywords entering the \beagle\ parameter files.  
+
+% *************************************************************************
+% Generic parameters
+\subsection{Generic parameters}
+
+\begin{keyword_table}
+
+\multirow{4}{\linewidth}{\colkeyword{VERBOSE}} 	& 0 	& No output is printed. \\
+									& 1	& Print only errors. \\
+									& 2 	& Print errors and warnings (\default). \\
+									& 3  	& Print errors, warnings and messages. \\
+\\[\rowspace]
+									
+
+\colkeyword{SEED}	& \placeholder{int}	& Seed for the random number generator. A negative value (\default is $-1$) implies that the seed is chosen automatically based on the system clock. \\
+
+
+\end{keyword_table}
+
+% *************************************************************************
+% Templates
+\subsection{Templates}
+
+\begin{keyword_table}								
+
+\colkeyword{TEMPLATES}	& \placeholder{string}	&  File containing the list of templates SSPs describing stellar emission. (If set the \keyword{TEMPLATES NEBULAR} keyword should not be set). \\
+
+\\[\rowspace]
+
+\colkeyword{TEMPLATES NEBULAR}	& \placeholder{string}	&  File containing the list of templates SSPs describing stellar+nebular emission. (If set the \keyword{TEMPLATES} keyword should not be set).\\
+
+\\[\rowspace]
+
+\colkeyword{TEMPLATES ALPHA ELEMENTS}	& \placeholder{string}	&  File containing the list of templates SSPs with different \aFe\ abundance ratios. \\
+
+\\[\rowspace]
+
+\colkeyword{ALPHA DIFFERENTIAL}	& \placeholder{bool}	&  Whether to include the effect of \aFe\ variation in a differential way or not. (It requires the \keyword{TEMPLATES ALPHA ELEMENTS} keyword).\\
+
+\\[\rowspace]
+
+\colkeyword{SHRINK TEMPLATES WL RANGE}	& \placeholder{float} &  Which wavelength range, in \AA, for the templates to consider. A negative value means the minimum/maximum allowed range, e.g. $-1 \; 10000$ will consider the templates from the minimum wavelength and up to $10^4$ \AA.\\
+
+\\[\rowspace]
+
+\colkeyword{REBIN TEMPLATES}	& \placeholder{float}	&  The width, in \AA, of the new templates wavelength bins. This can be used to reduce the number of wavelength points in the templates, to speed the computations that do not require a finer binning.\\
+
+\end{keyword_table}
+
+% *************************************************************************
+% Spectroscopy
+
+\subsection{Spectroscopy}\label{sec:paramFile_spec}
+
+\begin{keyword_table_token}
+
+\multirow{45}{\linewidth}{\colkeyword{SPECTRUM FILE DESCRIPTION}} 	&  \coltoken{wl}:\coltoken{colNum}: 	& \placeholder{int} & Column number (starting from 1) in an ASCII file containing the wavelength array.\\
+
+													&  \coltoken{wl}:\coltoken{colName}: 	& \placeholder{string} & Column name in a FITS table containing the wavelength array. \\
+													
+													\\[\rowspace]
+													
+																										
+													&  \coltoken{flux}:\coltoken{colNum}: 	& \placeholder{int} & Column number (starting from 1) in an ASCII file, or dimension in a FITS image (starting from 0), containing the flux array. Units must be $F_\lambda$. \\
+													
+													&  \coltoken{flux}:\coltoken{colName}: 	& \placeholder{string} & Column name in a FITS table containing the flux array. \\
+													
+													\\[\rowspace]
+													
+													
+													&  \coltoken{fluxerr}:\coltoken{colNum}: 	& \placeholder{int} & Column number (starting from 1) in an ASCII file, or dimension in a FITS image (starting from 0), containing the flux error array.  \\
+													
+													&  \coltoken{fluxerr}:\coltoken{colName}: 	& \placeholder{string} & Column name in a FITS table containing the flux error array. \\
+													
+													\\[\rowspace]
+													
+													
+													&  \coltoken{sky}:\coltoken{colNum}: 	& \placeholder{int} & Column number (starting from 1) in an ASCII file, or dimension in a FITS image (starting from 1), containing the sky flux array.  \\
+													
+													&  \coltoken{sky}:\coltoken{colName}: 	& \placeholder{string} & Column name in a FITS table containing the sky flux array. \\
+													
+													\\[\rowspace]
+													
+													
+													&  \coltoken{mask}:\coltoken{colNum}: 	& \placeholder{int} & Column number (starting from 1) in an ASCII file, or dimension in a FITS image (starting from 1), containing the mask array.  \\
+													
+													&  \coltoken{mask}:\coltoken{colName}: 	& \placeholder{string} & Column name in a FITS table containing the mask array. \\
+													
+													\\[\rowspace]
+
+								
+													&  \coltoken{flux}:\coltoken{conversion}: 	& \placeholder{real} & Conversion factor from the units of the flux array to the units adopted in \beagle, [\FlUnits].  \\
+													
+													\\[\rowspace]
+													
+													
+													&  \coltoken{wl}:\coltoken{conversion}: 	& \placeholder{real} & Conversion factor from the units of the wavelength array to the units adopted in \beagle, [\AA].  \\
+													
+													\\[\rowspace]
+													
+													&  \coltoken{wl}:\coltoken{dispersion}: 	& \placeholder{string} & Dispersion type of the wavelength in a 2D FITS image, it can be `\fixedfont{linear}' (\default), `\fixedfont{log}', or `\fixedfont{ln}'.  \\
+													
+													\\[\rowspace]
+													
+													&  \coltoken{wl}:\coltoken{type}: 	& \placeholder{string} & Type of wavelength, it can be `\fixedfont{air}' (\default) or `\fixedfont{vacuum}'.  \\
+													
+													\\[\rowspace]
+													
+													&  \coltoken{redshift}:\coltoken{keyword}: 	& \placeholder{string} & Keyword indicating the redshift in the header of an ASCII or FITS file (\default\ is `\fixedfont{redshift}').   \\
+													
+													\\[\rowspace]
+													
+													&  \coltoken{min\_rel\_err}: 	& \placeholder{real} & Minimum relative error to add in quadrature to the flux error read from the input file.  \\
+													
+													\\[\rowspace]
+
+          \midrule
+
+
+\colkeyword{MASK OBSERVATION REGIONS} & \coltoken{range-\#}: & $2\times$\placeholder{real} & Regions to be masked in the observed spectrum. A negative value in the first element of the region, e.g. $[-1, 5000.]$ means consider the minimum wavelength, while in the second element of the region it means consider the maximum wavelength, e.g. [1.5E+4, -1].  \\
+
+\\[\rowspace]
+							
+\colkeyword{MASK TEMPLATE REGIONS} & \coltoken{range-\#}: & $2\times$\placeholder{real} & Regions to be masked in the templates. A negative value in the first element of the region, e.g. $[-1, 5000.]$ means consider the minimum wavelength, while in the second element of the region it means consider the maximum wavelength, e.g. [1.5E+4, -1]. Note that while the \keyword{MASK OBSERVATION REGIONS} keyword acts in the observed-frame of the spectrum, this keyword acts in the rest-frame of the templates. \\
+
+\\[\rowspace]
+
+
+\colkeyword{MASK EMISSION LINES} &  & \placeholder{bool} & Whether to mask emission lines or not (see Section~\ref{} for details on the adopted algorithm).  \\
+
+\\[\rowspace]
+
+
+\colkeyword{MASK BAD SKY} &  & \placeholder{bool} & Whether to mask bad sky subtractions not (see Section~\ref{} for details on the adopted algorithm).  \\
+
+
+\end{keyword_table_token}
+
+% *************************************************************************
+% Photometry
+\subsection{Photometry}\label{sec:paramFile_phot}
+
+
+\begin{keyword_table}								
+
+\colkeyword{FILTERS FILE}	& \placeholder{string}	&  The \textFile{filters file} contains the list of filters used in the photometric catalogue. The format of the filters parameter file is described below. \\
+
+\\[\rowspace]
+
+\colkeyword{PHOTOMETRIC CATALOGUE}	& \placeholder{string}	&  File containing the photometric catalogue. \\
+
+
+\end{keyword_table}
+
+The \textFile{filters file} defines the photometric filters that will be used in \beagle, but also the format of the input photometric catalogue. 
+
+\begin{token_table}
+
+\coltoken{object\_ID}:\coltoken{colNum}			&		\placeholder{int} 	&	Column number (starting from 1) in an ASCII file containing the object ID (it is read, and treated, as a \placeholder{string}).	 \\
+
+\coltoken{object\_ID}:\coltoken{colName}			&		\placeholder{string} 	&	Column name in a FITS table containing the object ID.	 \\
+
+\\[\rowspace]
+
+\coltoken{units}							&		\placeholder{string} 	&	Units of the fluxes in the photometric catalogue. It can be either `\fixedfont{Jy}' (\default), `\fixedfont{milliJy}', `\fixedfont{microJy}', or `\fixedfont{nanoJy}'.	 \\
+
+\\[\rowspace]
+
+\coltoken{flux}:\coltoken{conversion}		&		\placeholder{real} 	&	 Conversion factor from the units of the fluxes to the units adopted in \beagle, [\FnuUnits].	 \\
+
+\\[\rowspace]
+
+\coltoken{redshift}:\coltoken{colNum}			&		\placeholder{int} 	&	Column number (starting from 1) in an ASCII file containing the object redshift.	 \\
+
+\coltoken{redshift}:\coltoken{colName}			&		\placeholder{string} 	&	Column name in a FITS table containing the object redshift.	 	 \\
+
+\\[\rowspace]
+
+
+\coltoken{aperture\_correction}:\coltoken{colNum}			&		\placeholder{int} 	&	Column number (starting from 1) in an ASCII file containing the object aperture correction. All fluxes will be multiplied by this factor before being analysed by \beagle.	 \\
+
+\coltoken{aperture\_correction}:\coltoken{colName}			&		\placeholder{string} 	&	Column name in a FITS table containing the object aperture correction.	\\
+
+\\[\rowspace]
+
+
+\coltoken{index}			&		\placeholder{int} 	&	Index of the photometric filter corresponding to the filters defined in the \env{FILTERS} environment variable, typically the \binFile{FILTERBIN.RES} created by bc03 \exec{build\_filterbin} command. (One per filter). \\
+
+\\[\rowspace]
+
+\coltoken{flux}:\coltoken{colNum}			&		\placeholder{int} 	&	Column number (starting from 1) in an ASCII file containing the flux in a given filter. (One per filter).  \\
+
+\coltoken{flux}:\coltoken{colName}			&		\placeholder{string} 	&	Column name in a FITS table containing the flux in a given filter. (One per filter). 	 \\
+
+\\[\rowspace]
+
+\coltoken{fluxerr}:\coltoken{colNum}			&		\placeholder{int} 	&	Column number (starting from 1) in an ASCII file containing the flux error in a given filter. (One per filter).	 \\
+
+\coltoken{fluxerr}:\coltoken{colName}			&		\placeholder{string} 	&	Column name in a FITS table containing the flux errir in a given filter. (One per filter). 	 \\
+
+\\[\rowspace]
+
+
+\coltoken{min\_rel\_err}			&		\placeholder{real} 	&	Minimum relative error to add in quadrature to the flux error read from the input file. (One per filter).	 \\
+
+\\[\rowspace]
+
+\end{token_table}
+
+
+Below we report an example \textFile{filters file}, which included different HST bands.
+
+
+\inputminted[breaklines]{ini}{/Users/jchevall/Coding/BEAGLE/files/filters/filters_UVUDF.dat}   
+  
+   
+\clearpage
+%%%% DATA FORMAT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Data format}
+
+
+\subsection{Spectroscopic data}
+
+
+\beagle\ assumes that spectroscopic data are expressed in units of $F_\lambda$ (\FlUnits), and the wavelength in units of \AA.\footnote{To convert a flux density $F_\nu$ (in Jy, i.e. $10^{-23} \, \FnuUnits$) to $F_\lambda$ (\FlUnits), one can adopt the following expression $F_\lambda = F_\nu \, 10^{-23} \, \frac{c}{\lambda^2}$, where both the speed of light $c$ and wavelength $\lambda$ are expressed in \AA.} The units of the input spectrum and of the wavelength can be scaled by a constant factor with respect to such units, and these conversion factors can be passed by using the \token{conversion} token in the \keyword{SPECTRUM FILE DESCRIPTION} keyword of the \beagle\ parameter file (see section~\ref{sec:paramFile_spec}).
+
+
+\subsubsection{FITS format}
+
+Spectroscopic data can be supplied in the FITS format, either through FITS tables, or FITS images. In the case of FITS tables, the column names specified in the \keyword{SPECTRUM FILE DESCRIPTION} keyword (section~\ref{sec:paramFile_spec}) are used to associate each column of the FITS table to a quantity. In the case of FITS images, the column numbers (starting from 1) specified in the \keyword{SPECTRUM FILE DESCRIPTION} keyword define the (second) dimension of the image corresponding to each quantity (the first dimension is assumed to be wavelength). Note that in both cases it is assumed that the table or image are contained in the first (non-empty) extension of the FITS file. 
+
+\beagle\ will also search for the \coltoken{redshift}:\coltoken{keyword} in the FITS header to set a redshift for the object.
+
+\subsubsection{ASCII format}
+
+The header of the ASCII file is ignored, and the different columns numbers (starting from 1) specified in the \keyword{SPECTRUM FILE DESCRIPTION} keyword (section~\ref{sec:paramFile_spec}) are used to associate each column of the ASCII file to a quantity.
+
+However, one can specify a redshift for the object by adding the following line to the file header
+
+\begin{minted}[escapeinside=||]{ini}
+# redshift = |\placeholder{real}|
+\end{minted}
+
+where `redshift' must match the keyword defined through the \coltoken{redshift}:\coltoken{keyword} token (see section~\ref{sec:paramFile_spec}). 
+
+\subsection{Photometric data}
+
+\subsubsection{FITS format}
+
+\subsubsection{ASCII format}
+
+
+\subsection{Photometric filters}
+
+
+To add further filter transmission functions you should modify the \cmd{\$}\env{FILTERS/}\textFile{filterfrm.res} file, by adding {\bf at the end} of the file the new filter transmission function, with the following format 
+$<\txn{filter}>$
+\begin{minted}{bash}
+# <filter_name>
+wl_1 T_1
+ .    .
+ .    .
+ .    .
+wl_n T_n
+\end{minted}
+where \cmd{wl\_1} to \cmd{wl\_n} indicate the wavelength (in \AA), and \cmd{T\_1} to \cmd{T\_n} the corresponding transmission factor. 
+
+Once you have modified the \cmd{filterfrm.res} file, you must create the corresponding \binFile{FILTERBIN.RES} binary file (which is read by \beagle). For this, while inside the \cmd{FILTERS} folder, run the \exec{build\_filterbin} command. To be sure that the newly defined filter(s) has been included, check the \textFile{filters.log} file: at the end of the file you should see the new filters.
+
+\clearpage
+%%%% ADJUSTABLE PARAMETERS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Adjustable Parameters}
+
+
+% *************************************************************************
+% STAR FORMATION AND CHEMICAL ENRICHMENT HISTORY
+
+
+\subsection{Star formation and chemical enrichment history}
+
+\begin{adjust_par_table}\label{tab:SF_ChE_par}
+  
+  \param{sfh\_type} &  & \nmlparbox{ Type of SF and ChE history to adopt. This can be either
+   \begin{compactitem}
+  	\item `\paramValue{ssp}';
+  	\item `\paramValue{constant}'; 
+  	\item `\paramValue{exponential}', $\psi(t)\propto \exp(-t/\tau)$; 
+  	\item `\paramValue{delayed}', $\psi(t)\propto t \, \exp(-t/\tau)$;  
+  	\item `\paramValue{rising}', $\psi(t)\propto \exp(t/\tau)$.  
+   \end{compactitem}
+   For the above SF and ChE history types, the chemical enrichment is approximated by a single `\param{metallicity}' parameter, i.e. constant with time. For the SF and ChE history below, the metallicity is time-dependent.
+    \begin{compactitem} 
+    	\item `\paramValue{user}', i.e. a user-defined SF and ChE history read from an input ASCII file (see details below);
+   	\item `\paramValue{simulated}', i.e. based on a set of SF and ChE history obtained from a galaxy formation model (e.g. `phenomenological' model, semi-analytic model, hydro-dynamic simulation, see details below). 
+    \end{compactitem}
+   }\\
+   
+   \\[\rowspace]
+   
+   \param{mass} & $\log(\M/\Msun)$&  Mass of stars formed during a star formation period. Note that when using the \param{specific\_sfr} or \param{sfr} parameters, this does not include the mass formed in the `current star formation' period. The total mass formed in the galaxy is printed in the \col{M\_tot} column of the \ext{GALAXY PROPERTIES} extension, while the stellar mass (accounting for the return fraction) in the \col{M\_star} column of the same extension.\\
+   
+   \\[\rowspace]
+      
+   \param{ssp\_age} & $\txn{yr}$ & Age of stars when approximating a galaxy by a simple stellar population `\cmd{ssp}'.\\
+   
+   \\[\rowspace]
+   
+      
+   \param{tau} & $\log(\tau/\txn{yr})$ & Star formation timescale during a star formation period (for analytic star formation histories, such as `\cmd{exponential}', `\cmd{delayed}' or `\cmd{rising}').\\
+   
+   \\[\rowspace]
+   
+   
+   \param{metallicity} & $\log(Z/\Zsun)$& Metallicity of stars formed during a star formation period described by an `\cmd{ssp}', `\cmd{constant}', `\cmd{exponential}', `\cmd{delayed}' or `\cmd{rising}' function.  \\
+   
+   \\[\rowspace]
+   
+   \param{sfr} & $\log(\psi/\Msun\,\txn{yr}^{-1})$ &  Star formation rate averaged over the last \param{current\_sfr\_timescale} yr, over which it is assumed constant. \\
+
+   \\[\rowspace]
+   
+   \param{specific\_sfr} & $\log(\psi_\textsc{s}/\txn{yr}^{-1})$ &  Specific star formation rate, computed assuming constant star formation over the last \param{current\_sfr\_timescale} yr. Note that this is calculated considering the entire stellar mass formed in the galaxy star formation history, not only the mass actually locked into stars, i.e. it does not account for the return fraction. \\
+     
+   \\[\rowspace]
+   
+   \cmd{\param{current\_sfr\_timescale}=7} & $\log\txn{yr}$ &  Duration of the current episode of star formation. The default value ($10^7$ yr) is more appropriate when interpreting emission lines, as these are mainly produced by short-lived stars embedded in their birth clouds, which disrupts on timescales of $\sim10^7$ yr. When modelling UV data, one may test longer values, up to $10^8$ yr, to better account for the longer evolutionary timescale of stars producing the bulk of UV emission in star forming galaxies.\\
+  
+  \\[\rowspace]
+  
+   \param{young\_stars\_metallicity} & $\log(\Zyoung/\Zsun)$& Metallicity of stars younger than $10^7$ yr. If not set, and if nebular emission is included in the model, then the metallicity of young stars is set equal to the gas metallicity \Zgas, otherwise is set equal to the metallicity of the stars in the most recent star formation period. \\
+   
+   \\[\rowspace]
+  
+    \param{start\_age} & $\txn{yr}$ & Start look-back time of a star formation period. \\
+   
+   \\[\rowspace]
+   
+    \param{end\_age} & $\txn{yr}$ & End look-back time of a star formation period. \\
+   
+  
+\end{adjust_par_table}
+
+
+% *************************************************************************
+% NEBULAR EMISSION
+
+
+\subsection{Nebular emission}
+
+
+\begin{adjust_par_table}
+     
+   \param{nebular\_logU} & $\log \hat U$ & Effective galaxy-wide ionization parameter.  \\
+       
+    \\[\rowspace]
+
+   \param{nebular\_Z} & $\log(\Zgas/\Zsun)$ &  Effective galaxy-wide gas metallicity. \\
+     
+   \\[\rowspace]
+   
+    \param{nebular\_xi} & $\xi_\txn{d}$ & Effective galaxy-wide dust-to-metal mass ratio. \\
+
+\end{adjust_par_table}
+
+
+
+
+% *************************************************************************
+% DUST ATTENUATION
+
+
+\subsection{Dust attenuation}
+
+
+\begin{adjust_par_table}\label{tab:atten_par}
+  
+   
+  \cmd{\param{attenuation\_type}} &  & \nmlparbox{ Type of dust attenuation prescription to adopt. This can be either
+     \begin{compactitem}
+  	\item `\paramValue{calzetti}', the \citet{Calzetti1994} empirical attenuation curve obtained from a sample of 39 nearby starburst and blue-compact galaxies; 
+  	\item `\paramValue{cf00}', the 2-component model (diffuse ISM + stellar birth clouds) of \citet{Charlot2000};
+ 	\item `\paramValue{ccww13\_universal}', the `quasi-universal' relation of \citet{Chevallard2013};
+  	\item `\paramValue{ccww13\_full}', the `full model' of \citet{Chevallard2013}, based on the radiative transfer calculations of \citet{Tuffs2004}.
+        \end{compactitem}
+   }\\
+   
+    \\[\rowspace]
+   
+   \param{tauV\_eff} & \tauV  & $V$-band attenuation optical depth (\tauV). Parameter required for any \param{attenuation\_type}.\\
+     
+   \\[\rowspace]
+   
+    \cmd{\param{mu}=0.3} & $\mu$  & Fraction of attenuation optical depth arising from the diffuse ISM, i.e. $\tauVism = \mu \, \tauV$, while $\tauVbc = (1-\mu) \, \tauV$. Parameter required for \cmd{attenuation\_type=cf00, ccww13\_universal, ccww13\_full}.\\
+
+
+  \\[\rowspace]
+
+   \param{inclination} & $\theta/\txn{deg}$ &  Galaxy inclination in the dust radiative transfer calculations of \citet{Tuffs2004}. \\
+  
+
+  \\[\rowspace]
+
+   \param{tau\_b\_perp} & $\tauBp$ &  Central face-on $B$-band optical depth in the dust radiative transfer calculations of \citet{Tuffs2004}. \\
+  
+  
+  
+\end{adjust_par_table}
+
+
+
+% *************************************************************************
+% KINEMATICS
+
+
+\subsection{Kinematics}
+
+
+\begin{adjust_par_table}
+    
+   \cmd{\param{sigma}} & $\sigma/\kms$ &  Stellar velocity dispersion.\\
+   
+   \\[\rowspace]   
+    
+   \cmd{\param{v\_sys}} & $v_{sys}/\kms$ &  Stellar systemic velocity.\\
+   
+   \\[\rowspace]
+   
+       
+   \cmd{\param{h3}} & $h_3$ &  Coefficient of the 3rd order Hermite polynomial, to describe the stellar LOSVD.\\
+   
+   \\[\rowspace]
+   
+   \cmd{\param{h4}} & $h_4$ &  Coefficient of the 4th order Hermite polynomial, to describe the stellar LOSVD.\\
+  
+  \\[\rowspace]
+  
+   \cmd{\param{nebular\_sigma}} &  &  Gas velocity dispersion.\\
+   
+   \\[\rowspace]   
+    
+   \cmd{\param{nebular\_v\_sys}} &  &  Gas systemic velocity.\\
+   
+   \\[\rowspace]
+   
+       
+   \cmd{\param{nebular\_h3}} & &  Coefficient of the 3rd order Hermite polynomial, to describe gas LOSVD.\\
+   
+   \\[\rowspace]
+   
+   \cmd{\param{nebular\_h4}} &  &  Coefficient of the 4th order Hermite polynomial, to describe gas LOSVD.\\
+
+  
+\end{adjust_par_table}
+
+
+
+% *************************************************************************
+% INSTRUMENTAL EFFECTS
+
+
+\subsection{Instrumental effects}
+
+
+\begin{adjust_par_table}
+    
+   \cmd{\param{lsf\_type}} &  &  \nmlparbox{ Type of function describing the instrumental line-spread function: 
+   						\begin{compactitem}
+   						\item \paramValue{box}, a `box' function;
+						\item \paramValue{gaussian}, a 'gaussian' function, $\mathcal{N}(\muLSF, \sigLSF)$;
+						\end{compactitem}
+						}\\
+						
+	\\[\rowspace]
+	
+	\param{lsf\_box\_width}	& \AA	& Width of the box defining a \paramValue{box} LSF.\\
+	
+	\\[\rowspace]
+	
+	\param{lsf\_sigma}	& \sigLSF/\AA	& Width of the Gaussian defining a \paramValue{gaussian} LSF.\\
+
+	\\[\rowspace]
+	
+	\param{lsf\_center}	& \muLSF/\AA	& Center of the Gaussian defining a \paramValue{gaussian} LSF.\\
+
+ 	\\[\rowspace]
+	
+	\param{lsf\_sigma\_coeff-\#}	& 	& Coefficient of the polynomial defining the variation of \sigLSF\ with wavelength. For a polynomial of degree $N$, one has to define $N+1$ parameters \param{lsf\_sigma\_coeff-1}, \cmd{lsf\_sigma\_coeff-(N+1)}.\\
+  	
+	\\[\rowspace]
+	
+	\param{lsf\_center\_coeff-\#}	& 	& Coefficient of the polynomial defining the variation of \muLSF\ with wavelength. For a polynomial of degree $N$, one has to define $N+1$ parameters \param{lsf\_center\_coeff-1}, \cmd{lsf\_center\_coeff-(N+1)}.\\
+ 
+ 
+\end{adjust_par_table}
+
+
+\clearpage
+%%%% OUTPUT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Code output}
+
+% *************************************************************************
+% GALAXY PROPERTIES
+
+\subsection{\ext{GALAXY PROPERTIES}}
+
+\begin{fits_table}
+     
+   \col{redshift} &  &  Redshift of the galaxy. \\
+   
+   \\[\rowspace]
+      
+   \col{sigma} & $\kms$ &  Stellar velocity dispersion. \\
+   
+   \\[\rowspace]
+      
+   \col{M\_tot} & \Msun &  Total mass of stars formed in the galaxy.\\
+   
+   \\[\rowspace]
+      
+   \col{M\_star} & \Msun &  Total mass locked into stars (it accounts for the fraction of mass returned by stars to the ISM). \\
+   
+   \\[\rowspace]
+      
+   \col{mass\_w\_age} & yr &  Mass-weighted age, computed considering the mass locked into stars at each time step. \\
+   
+   \\[\rowspace]
+      
+   \col{lumin\_w\_age} & yr &  Luminosity-weighted age. \\
+   
+   \\[\rowspace]          
+   
+   \col{mass\_w\_Z} &  & Mass-weighted metallicity, computed considering the mass locked into stars at each time step. \\
+   
+   \\[\rowspace]
+      
+   \col{lumin\_w\_Z} &  &  Luminosity-weighted metallicity. \\
+   
+   \\[\rowspace]          
+     
+   \col{N\_ion} & $\txn{s}^{-1} / 3.826 \,10^{33}$ &  Number of ionizing photons emitted by the galaxy. \\
+   
+   \\[\rowspace]
+      
+   \col{xi\_ion} &  $\txn{erg}\,\txn{Hz}^{-1}$& Ionizing emissivity. \\
+   
+   \\[\rowspace]          
+         
+   \col{UV\_slope} &  & Slope of the UV continuum computed from the GALEX FUV and NUV filters. \\
+   
+   
+\end{fits_table}
+
+
+% *************************************************************************
+% STAR FORMATION
+
+\subsection{\ext{STAR FORMATION}}
+
+\begin{fits_table}
+     
+   \col{redshift} & &  This is equal to \col{redshift} column in the \ext{GALAXY PROPERTIES} extension.\\
+   
+   \\[\rowspace]
+      
+   \col{formation\_redshift} &  & The formation redshift of the galaxy, which defines the age of the oldest stars. \\
+   
+   \\[\rowspace]
+      
+   \col{SFR} & \MsunYr  &  Star formation rate averaged over the last \param{current\_sfr\_timescale} yr (typically $10^7$ yr).\\
+   
+   \\[\rowspace]
+      
+   \col{sSFR} & $\log \txn{yr}^{-1}$ &  Specific star formation rate, computed considering the mass formed in each time step, i.e. without accounting for the return fraction. \\
+   
+   \\[\rowspace]
+      
+   \col{max\_stellar\_age} &  &  \\
+      
+\end{fits_table}
+
+% *************************************************************************
+% STAR FORMATION BINS
+
+\subsection{\ext{STAR FORMATION BINS}}
+
+All columns reported below are those printed in the case of a single star formation period. When several SF periods are present, then a suffix is appended to indicate the columns pertaining to each period. In the case of two SF periods, the \col{bin\_sf\_type} will be indicate as \col{bin\_sf\_type-1} and  \col{bin\_sf\_type-2} for the first and second period, respectively. The same suffix is applied to all other columns.
+
+The number of \col{bin\_chem\_abund} columns depends on the number of chemical parameters in the model. In the simplest (and most common) case of a single chemical parameter, the `metallicity' (which includes all elements heavier than helium), the table will contain the column \col{bin\_chem\_abund\_1} (as indicate in the table below). When considering, for instance, both metallicity and $\alpha$-elements to iron ratio, then thee will be indicate by  \col{bin\_chem\_abund\_1} (metallicity) and  \col{bin\_chem\_abund\_2} ($\alpha$-to-iron).
+
+\begin{fits_table}
+     
+   \col{bin\_sf\_type} &  & \nmlparbox{ Indicates the type of star formation history adopted in the bin, translating into a number the different alternatives indicated in Table~\ref{tab:SF_ChE_par}:
+   \begin{compactitem}
+  	\item $1\rightarrow$ \cmd{ssp}; 
+  	\item $2\rightarrow$ \cmd{constant}; 
+  	\item $3\rightarrow$ \cmd{exponential}; 
+  	\item $4\rightarrow$ \cmd{delayed};  
+  	\item $5\rightarrow$ \cmd{rising};  
+  	\item $-2\rightarrow$ \cmd{user}; 
+  	\item $-1\rightarrow$ \cmd{simulated}. 
+   \end{compactitem}
+   }\\
+
+   
+   \\[\rowspace]
+      
+   \col{bin\_start\_age} &  yr &  Start look-back time of the star formation period. \\
+   
+   \\[\rowspace]
+   
+    \col{bin\_end\_age} & yr & End look-back time of the star formation period.  \\
+   
+   \\[\rowspace]
+   
+    \col{bin\_mass} & \Msun &  Total stellar mass formed during the star formation period (it does not account for the fraction of mass returned to the ISM). \\
+   
+   \\[\rowspace]
+   
+    \col{bin\_tau} & yr &  Star formation timescale during the star formation period, in the case of an \cmd{exponential}, \cmd{delayed} or \cmd{rising} star formation history. \\
+   
+   \\[\rowspace]
+   
+    \col{bin\_ssp\_age} & yr & Age of stars when describing a star formation period as a simple stellar population. \\
+   
+   \\[\rowspace]
+   
+    \col{bin\_chem\_abund\_1} &  &  Chemical abundance of stars in the star formation period, for analytic star formation histories. \\
+         
+\end{fits_table}
+
+
+% *************************************************************************
+% DUST ATTENUATION
+
+\subsection{\ext{DUST ATTENUATION}}
+
+
+\begin{fits_table}
+     
+   \col{attenuation\_type} &  & \nmlparbox{ Indicates the type of dust attenuation prescription adopted, translating into a number the different alternatives indicated in Table~\ref{tab:atten_par}:
+   \begin{compactitem}
+  	\item $1\rightarrow$ \cmd{cf00}; 
+  	\item $2\rightarrow$ \cmd{calzetti}; 
+  	\item $3\rightarrow$ \cmd{ccww13\_universal}; 
+  	\item $4\rightarrow$ \cmd{ccww13\_full}.
+   \end{compactitem}
+   }\\
+
+   
+   \\[\rowspace]
+      
+   \col{tauV\_eff} &  & $V$-band attenuation optical depth. \\
+   
+   \\[\rowspace]
+   
+    \col{mu} &  &  Fraction of attenuation optical depth arising from the diffuse ISM. \\
+   
+   \\[\rowspace]
+   
+    \col{tauB\_perp} &  &  Central face-on $B$-band optical depth in the dust radiative transfer calculations of \citet{Tuffs2004}. \\
+   
+   \\[\rowspace]
+   
+    \col{tauV\_eff\_ang\_aver} &  & Angle-averaged $V$-band attenuation optical depth. \\
+   
+   \\[\rowspace]
+   
+    \col{t\_birth\_clouds} &  yr & Timescale of disruption of stellar birth clouds.  \\
+   
+   \\[\rowspace]
+
+   
+    \col{inclination} & deg  & Galaxy inclination. \\
+         
+\end{fits_table}
+
+
+% *************************************************************************
+% NEBULAR EMISSION
+
+\subsection{\ext{NEBULAR EMISSION}}
+
+
+\begin{fits_table}
+     
+   \col{logU} &  & Effective galaxy-wide ionization parameter. \\
+   
+   \\[\rowspace]
+   
+    \col{Z} &  &  Effective galaxy-wide gas-phase metallicity. \\
+   
+   \\[\rowspace]
+   
+    \col{xi} &  &  Effective galaxy-wide ionization parameter dust-to-metal mass ratio. \\
+   
+   \\[\rowspace]
+   
+    \cmd{line\_name@line\_wl} & \Lsun & Luminosity of the \cmd{line\_name} line. \\
+   
+   \\[\rowspace]
+   
+    \cmd{line\_name@line\_wl\_EW} &  & Equivalent width of the \cmd{line\_name} line. \\
+         
+\end{fits_table}
+
+
+\vspace{2cm}
+
+% *************************************************************************
+% MARGINAL SED WL
+
+\subsection{\ext{MARGINAL SED WL}}
+
+
+\begin{fits_table}
+     
+   \col{wl} &  \AA & Wavelength array corresponding to the SEDs contained in the \cmd{MARGINAL SED} extension. \\
+   
+\end{fits_table}
+
+% *************************************************************************
+% MARGINAL SED MASK
+
+\subsection{\ext{MARGINAL SED MASK}}
+
+\begin{fits_table}
+
+   \col{mask} &   & Mask array corresponding to the SEDs contained in the \cmd{MARGINAL SED} extension. Values of 0 correspond to `false' values, while values of 1 to `true' ones. \\
+
+\end{fits_table}
+
+
+% *************************************************************************
+% MARGINAL SED
+
+\subsection{\ext{MARGINAL SED}}
+
+FITS 2D image containing the flux (units of \FlUnits) received by an observes at a distance $d_L(z)$ from the galaxy. If the model is computed at $z=0$, then $d_L=10\, \txn{pc}$.  corresponding to each set of parameters printed in the \cmd{POSTERIOR PDF} extension. Each column in the 2D image corresponds to a wavelength (printed in the \cmd{MARGINAL SED WL} extension), while each row corresponds to a different set of model parameters (printed in the \cmd{POSTERIOR PDF} extension).
+
+\subsection{\ext{FULL SED WL}}
+
+\begin{fits_table}
+     
+   \col{wl} &  \AA & Wavelength array corresponding to the SEDs contained in the \cmd{FULL SED} extension. \\
+   
+\end{fits_table}
+
+% *************************************************************************
+% FUKK SED MASK
+
+\subsection{\ext{FULL SED MASK}}
+
+\begin{fits_table}
+
+   \col{mask} &   & Mask array corresponding to the SEDs contained in the \cmd{FULL SED} extension. Values of 0 correspond to `false' values, while values of 1 to `true' ones.\\
+
+\end{fits_table}
+
+
+% *************************************************************************
+% FULL SED
+
+\subsection{\ext{FULL SED}}
+
+FITS 2D image containing the predicted luminosity (units of $\Lsun\, \txn{\AA}^{-1}$, where $\Lsun = 3.826 \, 10^{33} \, \txn{erg} \,\txn{s}^{-1}$) corresponding to each set of parameters printed in the \cmd{POSTERIOR PDF} extension. Each column in the 2D image corresponds to a wavelength (printed in the \cmd{FULL SED WL} extension), while each row corresponds to a different set of model parameters (printed in the \cmd{POSTERIOR PDF} extension). 
+
+
+% *************************************************************************
+% MARGINAL PHOTOMETRY
+
+\subsection{\ext{MARGINAL PHOTOMETRY}}
+
+Flux (units of \FnuUnits) received by an observer located at a distance $d_L(z)$ from the source. 
+
+% *************************************************************************
+% ABSOLUTE MAGNITUDES
+
+\subsection{\ext{ABSOLUTE MAGNITUDES}}
+
+Magnitudes (AB system) computed from the flux received by an observer located at a distance of 10 pc from the source.
+
+% *************************************************************************
+% APPARENT MAGNITUDES
+
+\subsection{\ext{APPARENT MAGNITUDES}}
+
+Magnitudes (AB system) computed from the flux received by an observer located at a distance $d_L(z)$ from the source.
+ 
+
+
+% *************************************************************************
+% POSTERIOR PDF
+
+\subsection{\ext{POSTERIOR PDF}}
+
+\begin{fits_table}
+   
+    \cmd{probability} &  & Posterior probability. \\
+
+   \\[\rowspace]
+
+    \cmd{likelihood} &  & Value of the likelihood function. \\
+
+   \\[\rowspace]
+
+    \cmd{param\_name} &  & Value of the different model free parameters. \\
+
+         
+\end{fits_table}
+
+
+
+
+
+
+
+
+   % Index
+   \clearpage
+   \phantomsection
+   \addcontentsline{toc}{section}{Index}
+   \printindex
+
+\bibliographystyle{mnras}
+
+\bibliography{BEAGLE_manual_biblio} % your references Yourfile.bib
+
+\end{document}
