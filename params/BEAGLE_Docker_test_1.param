@@ -77,16 +77,16 @@ IGM ABSORPTION = Inoue
 #*************** SF BIN #1 **************************************
 #****************************************************************
 
-SF_PARAMETER  = name:sfh_type                 type:fixed   char_value:delayed
+SF_PARAMETER  = name:sfh_type                 mock:type:fixed   char_value:delayed
 
 # In log(yr)
-SF_PARAMETER  = name:tau                      type:fitted  order_priority:1  prior:distribution:uniform  prior:range:[7.,10.5] 
+SF_PARAMETER  = name:tau                      mock:type:random  mock:distribution:uniform  mock:range:[7.,10.5] 
 
 # in log(Z/Z_sun)
-SF_PARAMETER  = name:metallicity              type:fitted  order_priority:1  prior:distribution:uniform  prior:range:[-2.2,0.24]
+SF_PARAMETER  = name:metallicity              mock:type:random  mock:distribution:uniform  mock:range:[-2.2,0.24]
 
 # In log M/M_sun
-SF_PARAMETER  = name:mass                     type:fitted  order_priority:0  prior:distribution:uniform  prior:range:[7.,12.] 
+SF_PARAMETER  = name:mass                     mock:type:random  mock:distribution:uniform  mock:range:[7.,12.] 
 
 #****************************************************************
 #***************  OTHER SF PARAMETERS ***************************
