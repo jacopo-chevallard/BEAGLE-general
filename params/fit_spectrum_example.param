@@ -177,8 +177,9 @@ PRINT SF AND ChE HISTORIES = F
 # ******************* PARAMETERS HANDLING  *****************************
 #****************************************************************
 
-
-PDF SAMPLER FILE = $BEAGLE_PARAM_DIR/MCMC_example.param
+#The following MCMC param file has been edited to allow a speedy (relatively) example case, don't use
+#this file for science results.
+PDF SAMPLER FILE = $BEAGLE_PARAM_DIR/MCMC_spectra_example.param
 
 
 #PARAMETER  = name:redshift        type:from_file
