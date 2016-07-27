@@ -1,0 +1,124 @@
+# This is a stripped down version of the BEAGLE parameter file for 
+# with checking the correct installation of BEAGLE using Docker.
+# This file will be used for producing artificial photometry using
+# an analytic star formation history.
+# Verbose mode: 0 ---> no info
+#               1 ----> print only errors
+#               2 ---> print errors and warnings
+#               3 ----> print errors, warnings and info 
+VERBOSE = 1
+
+# Seed for the random number generator
+SEED = 994189
+
+#****************************************************************
+#******************** COSMOLOGICAL PARAMETERS *******************
+#****************************************************************
+#
+# If left blank, default parameter values will be used.
+
+HUBBLE_0 = 
+
+OMEGA_MATTER =
+
+OMEGA_LAMBDA =
+
+#****************************************************************
+# ******************* TEMPLATES  *****************************
+#****************************************************************
+
+#TEMPLATES = $BEAGLE_TEMPLATES/bc03/bc03_miles_chab_spectra
+TEMPLATES NEBULAR = $BEAGLE_TEMPLATES/ineb_Jan16_C100/cb2013_n2_mup100_N015_O01_deplO70_C100_Jan16
+EMISSION LINES CONFIGURATION = $BEAGLE_TEMPLATES/ineb_Jan16_C100/cb2013_n2_mup100_N015_O01_deplO70_C100_Jan16_line_wavelengths_PHOTOMETRY.dat
+
+SHRINK TEMPLATES WL RANGE = 900 60000
+#REBIN TEMPLATES = 10
+
+#SPECTRAL INDICES CONFIGURATION =
+
+#SPECTRAL INDICES CATALOGUE = 
+
+
+#****************************************************************
+# ******************* PHOTOMETRY *****************************
+#****************************************************************
+
+#FILTERS FILE = $BEAGLE_FILTERS/filters_fit_photometry_example.dat
+
+FILTERS FILE = $BEAGLE_FILTERS/filters_NIRCam_mock.dat
+
+#PHOTOMETRIC CATALOGUE = $BEAGLE_DATA/cat_fit_photometry_example.fits
+
+FIT PHOTOMETRY = F
+FIT SPECTRUM = F
+
+
+#****************************************************************
+#******************** DUST ATTENUATION AND IGM ABSORPTION *******
+#****************************************************************
+#
+IGM ABSORPTION = Inoue
+
+# File containing set of radiative transfer (RT) calculations of dust attenuation of starlight
+#RT CALCULATIONS = Tuffs_bulge_NEW-28-11.dat Tuffs_thick_NEW-28-11.dat Tuffs_thin_NEW-28-11.dat
+#RT COMPONENTS NAMES = bulge thick_disc thin_disc
+
+
+# **************************************************
+# ************** SF BIN #1 **************************
+# **************************************************
+SF_PARAMETER  = name:sfh_type                 mock:type:fixed  char_value:delayed
+#options for analytic SFHs are 'ssp' (for a burst), 'constant', 'exponential', 'delayed', 'rising'
+
+# In log(yr)
+SF_PARAMETER  = name:tau                      mock:type:random  mock:distribution:uniform  mock:range:[7.,10.5]
+
+# in log(Z/Z_sun)
+SF_PARAMETER  = name:metallicity              type:from_file
+
+# In log M/M_sun
+SF_PARAMETER  = name:mass                     type:from_file  
+
+# **************************************************
+# **************  OTHER SF PARAMETERS **************************
+# **************************************************
+
+# In log(M_sun/yr)
+SF_PARAMETER  = name:sfr                type:from_file
+
+#****************************************************************
+# ******************* PRINTED OUTPUT  *****************************
+#****************************************************************
+
+RESULTS DIRECTORY = $BEAGLE_RESULTS/BEAGLE_JWST_walkthrough
+
+MOCK INPUT PARAMETERS = fileName:$BEAGLE_DATA/catalogue_params.fits
+
+N_OBJECTS = 3
+
+PRINT PHOTOMETRY = T
+PRINT SPECTRUM = T
+PRINT SPECTRAL INDICES = F
+PRINT SF AND ChE HISTORIES = F
+
+#****************************************************************
+# ******************* PARAMETERS HANDLING  *****************************
+#****************************************************************
+
+#PDF SAMPLER FILE = $BEAGLE_PARAM_DIR/MCMC_example.param
+PDF SAMPLER FILE = $BEAGLE_PARAM_DIR/MCMC_new.param
+
+PARAMETER  = name:redshift     type:from_file
+
+PARAMETER  = name:nebular_logU mock:type:random mock:range:[-4,-1]
+
+PARAMETER  = name:nebular_xi   mock:type:fixed    mock:value:0.3
+
+PARAMETER  = name:nebular_Z    type:from_file
+
+PARAMETER  = name:attenuation_type  mock:type:fixed  char_value:CF00   
+# values can be: CF00, Calzetti, CCWW13_universal, CCWW13_full
+
+PARAMETER  = name:tauV_eff     mock:type:random  order_priority:0      mock:distribution:uniform   mock:range:[0.,2.]
+
+PARAMETER  = name:mu           mock:type:fixed   value:0.4
