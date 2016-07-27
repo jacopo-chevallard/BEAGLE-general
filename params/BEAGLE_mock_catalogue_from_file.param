@@ -90,7 +90,7 @@ SF_PARAMETER  = name:sfr                type:from_file
 # ******************* PRINTED OUTPUT  *****************************
 #****************************************************************
 
-RESULTS DIRECTORY = $BEAGLE_RESULTS/BEAGLE_JWST_walkthrough
+RESULTS DIRECTORY = $BEAGLE_RESULTS/BEAGLE_mock_catalogue_from_file
 
 MOCK INPUT PARAMETERS = fileName:$BEAGLE_DATA/catalogue_params.fits
 
