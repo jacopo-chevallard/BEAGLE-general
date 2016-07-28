@@ -45,7 +45,7 @@ SHRINK TEMPLATES WL RANGE = 900 60000
 
 #FILTERS FILE = $BEAGLE_FILTERS/filters_fit_photometry_example.dat
 
-FILTERS FILE = $BEAGLE_FILTERS/filters_NIRCam_mock.dat
+FILTERS FILE = $BEAGLE_FILTERS/filters_XDF.dat
 
 #PHOTOMETRIC CATALOGUE = $BEAGLE_DATA/cat_fit_photometry_example.fits
 
