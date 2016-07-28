@@ -92,6 +92,8 @@ SF_PARAMETER  = name:sfr                type:from_file
 
 RESULTS DIRECTORY = $BEAGLE_RESULTS/BEAGLE_mock_catalogue_from_file
 
+MOCK CATALOGUE NAME = catalogue.fits
+
 MOCK INPUT PARAMETERS = fileName:$BEAGLE_DATA/catalogue_params.fits
 
 N_OBJECTS = 3
