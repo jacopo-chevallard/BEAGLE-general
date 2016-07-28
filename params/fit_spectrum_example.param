@@ -168,7 +168,7 @@ SF_PARAMETER  = name:current_sfr_timescale        type:fixed  value:7.
 RESULTS DIRECTORY = $BEAGLE_RESULTS/fit_spectra_example
 
 
-PRINT PHOTOMETRY = T
+PRINT PHOTOMETRY = F
 PRINT SPECTRUM = T
 PRINT SPECTRAL INDICES = F
 PRINT SF AND ChE HISTORIES = F
