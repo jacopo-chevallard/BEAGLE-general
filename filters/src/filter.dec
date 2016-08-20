@@ -20,7 +20,7 @@ c	parameter (mxft=150,mxwf=800)
 c	common /c_filter/ iread,jread,nf,np(mxft),r(mxwf,mxft,2)
 
 c	Modified 11-MAY-1999 to adapt to new format
-	parameter (mxft=300,mxwp=200000)
+	parameter (mxft=500,mxwp=200000)
 	character*64 fid(0:mxft)
 	integer iread,jread,nf,ltot,ni(mxft),nl(mxft),np(mxft)
 	real r(mxwp,2)
