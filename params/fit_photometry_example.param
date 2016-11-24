@@ -1,3 +1,4 @@
+[main]
 # This is a stripped down version of the BEAGLE parameter file for 
 # with checking the correct installation of BEAGLE using Docker.
 # This file will be used for producing artificial photometry using
