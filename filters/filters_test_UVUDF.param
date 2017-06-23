@@ -1,3 +1,0 @@
-PHOTOMETRIC FILTERS = configFile:/Users/jchevall/Coding/BEAGLE/files/tests/filters_config_UVUDF.dat  fileName:/Users/jchevall/Coding/BEAGLE/files/filters/test.fits extName:TRANSMISSION
-
-PHOTOMETRIC CATALOGUE = $BEAGLE_DATA/UVUDF/hlsp_uvudf_hst_v2.0_cat_Types_no_star.fits
