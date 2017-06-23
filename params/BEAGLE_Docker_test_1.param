@@ -1,0 +1,122 @@
+[main]
+# This is a stripped down version of the BEAGLE parameter file for 
+# with checking the correct installation of BEAGLE using Docker.
+# This file will be used for producing artificial photometry using
+# an analytic star formation history.
+# Verbose mode: 0 ---> no info
+#               1 ----> print only errors
+#               2 ---> print errors and warnings
+#               3 ----> print errors, warnings and info 
+VERBOSE = 1
+
+# Seed for the random number generator
+SEED = 994188
+
+#****************************************************************
+#******************** COSMOLOGICAL PARAMETERS *******************
+#****************************************************************
+#
+# If left blank, default parameter values will be used.
+
+HUBBLE_0 = 
+
+OMEGA_MATTER =
+
+OMEGA_LAMBDA =
+
+#****************************************************************
+#******************** TEMPLATES  ********************************
+#****************************************************************
+
+#TEMPLATES = $BEAGLE_TEMPLATES/bc03/bc03_miles_chab_spectra
+TEMPLATES NEBULAR = $BEAGLE_TEMPLATES/ineb_Jan16_C100/cb2013_n2_mup100_N015_O01_deplO70_C100_Jan16
+EMISSION LINES CONFIGURATION = $BEAGLE_TEMPLATES/ineb_Jan16_C100/cb2013_n2_mup100_N015_O01_deplO70_C100_Jan16_line_wavelengths_PHOTOMETRY.dat 
+ 
+SHRINK TEMPLATES WL RANGE = 900 60000
+#REBIN TEMPLATES = 10
+
+#SPECTRAL INDICES CONFIGURATION =
+
+#SPECTRAL INDICES CATALOGUE = 
+
+
+#****************************************************************
+#******************** PHOTOMETRY ********************************
+#****************************************************************
+
+FILTERS THROUGHPUTS = $BEAGLE_FILTERS/test.fits
+
+FILTERS CONFIGURATION = $BEAGLE_FILTERS/filters_config_UVUDF_test.dat
+
+#****************************************************************
+#******************** (MOCK)  OBSERVATIONS **********************
+#****************************************************************
+
+N_OBJECTS = 10
+
+#****************************************************************
+#******************** IGM ABSORPTION *******
+#****************************************************************
+#
+IGM ABSORPTION = Inoue
+
+#****************************************************************
+#*************** SF BIN #1 **************************************
+#****************************************************************
+
+SF_PARAMETER  = name:sfh_type                 mock:type:fixed   char_value:delayed
+
+# In log(yr)
+SF_PARAMETER  = name:tau                      mock:type:random  mock:distribution:uniform  mock:range:[7.,10.5] 
+
+# in log(Z/Z_sun)
+SF_PARAMETER  = name:metallicity              mock:type:random  mock:distribution:uniform  mock:range:[-2.2,0.24]
+
+# In log M/M_sun
+SF_PARAMETER  = name:mass                     mock:type:random  mock:distribution:uniform  mock:range:[7.,12.] 
+
+#****************************************************************
+#***************  OTHER SF PARAMETERS ***************************
+#****************************************************************
+# To be used if you want to allow current sfr to be and independent parameter
+
+# In log(M_sun/yr)
+#SF_PARAMETER  = name:specific_sfr                      type:fitted  order_priority:1   prior:distribution:uniform  prior:range:[-12.,-8.]  
+
+# in log(yr)
+#SF_PARAMETER  = name:current_sfr_timescale        type:fixed  value:8.
+
+#****************************************************************
+#******************** PRINTED OUTPUT  ***************************
+#****************************************************************
+
+RESULTS DIRECTORY = $BEAGLE_RESULTS/BEAGLE_Docker_test_1
+
+MOCK CATALOGUE NAME = my_first_test
+
+#PRINT PHOTOMETRY = T
+#PRINT SPECTRUM = T
+#PRINT SPECTRAL INDICES = F
+#PRINT SF AND ChE HISTORIES = F
+
+#****************************************************************
+#******************** PARAMETERS HANDLING  **********************
+#****************************************************************
+
+PDF SAMPLER FILE = $BEAGLE_PARAM_DIR/MCMC_example.param
+
+
+PARAMETER  = name:redshift          mock:type:random   mock:distribution:uniform  mock:range:[0.,15.]
+
+PARAMETER  = name:nebular_logU      mock:type:dependent
+
+PARAMETER  = name:nebular_xi        mock:type:fixed    value:0.3
+
+PARAMETER  = name:nebular_Z         mock:type:dependent 
+
+# char_value for attenuation_type can be: CF00, Calzetti, CCWW13_universal, CCWW13_full
+PARAMETER  = name:attenuation_type  mock:type:fixed  char_value:Calzetti
+
+PARAMETER  = name:tauV_eff          mock:type:random   mock:distribution:uniform   mock:range:[0.,2.]
+
+PARAMETER  = name:mu                mock:type:fixed    value:0.4
