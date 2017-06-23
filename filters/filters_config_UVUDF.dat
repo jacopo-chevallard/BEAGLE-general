@@ -1,0 +1,31 @@
+
+# The possible units that can be used are: Jy, milliJy, microJy, nanoJy
+# Alternatively one can pass a conversion factor to convert the fluxes in the
+# catalogue into [erg s^-1 cm^-2 Hz^-1], e.g.
+# flux:conversion:<conversion factor>
+units:microJy
+
+# Column in the photometric catalogue containinig the object IDs
+object_ID:colName:ID
+
+# List of photometric filters included in the input catalogue
+name:UVUDF-HST_WFC3_UVIS_F225W        min_rel_err:0.02       flux:colName:FLUX_F225W    fluxErr:colName:FLUXERR_F225W       
+name:UVUDF-HST_WFC3_UVIS_F275W        min_rel_err:0.02       flux:colName:FLUX_F275W    fluxErr:colName:FLUXERR_F275W      
+name:UVUDF-HST_WFC3_UVIS_F336W        min_rel_err:0.02       flux:colName:FLUX_F336W    fluxErr:colName:FLUXERR_F336W     
+name:UVUDF-HST_ACS_WFC_F435W              min_rel_err:0.02       flux:colName:FLUX_F435W    fluxErr:colName:FLUXERR_F435W         
+name:UVUDF-HST_ACS_WFC_F606W              min_rel_err:0.02       flux:colName:FLUX_F606W    fluxErr:colName:FLUXERR_F606W         
+name:UVUDF-HST_ACS_WFC_F775W              min_rel_err:0.02       flux:colName:FLUX_F775W    fluxErr:colName:FLUXERR_F775W         
+name:UVUDF-HST_ACS_WFC_F850LP             min_rel_err:0.02       flux:colName:FLUX_F850LP   fluxErr:colName:FLUXERR_F850LP        
+name:UVUDF-HST_WFC3_IR_F105W             min_rel_err:0.02       flux:colName:FLUX_F105W    fluxErr:colName:FLUXERR_F105W         
+name:UVUDF-HST_WFC3_IR_F125W             min_rel_err:0.02       flux:colName:FLUX_F125W    fluxErr:colName:FLUXERR_F125W         
+name:UVUDF-HST_WFC3_IR_F140W             min_rel_err:0.02       flux:colName:FLUX_F140W    fluxErr:colName:FLUXERR_F140W         
+
+# List of photometric filters *not* included in the input catalogue, but that we want to add to the
+# output FITS fike
+name:EUCLID-Y
+
+name:VISTA-J
+
+name:VISTA-Z
+
+name:VISTA-Ks 
