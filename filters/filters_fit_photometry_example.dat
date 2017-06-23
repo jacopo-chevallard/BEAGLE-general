@@ -1,0 +1,12 @@
+# It contains the filters to be used when calculating only photmetric models
+#redshift:colName:spec_z
+#uncomment the above if you want to fit with a fixed redshift, also change param file to make redshift parameter 'fixed', rather than 'fitted'
+units:microJy
+object_ID:colName:ID
+
+name:UVUDF-HST_ACS_WFC_F435W       flux:colName:flux_B   fluxerr:colName:fluxerr_B
+name:UVUDF-HST_ACS_WFC_F606W       flux:colName:flux_V   fluxerr:colName:fluxerr_V 
+name:UVUDF-HST_ACS_WFC_F775W       flux:colName:flux_i   fluxerr:colName:fluxerr_i  
+name:UVUDF-HST_ACS_WFC_F850LP       flux:colName:flux_z   fluxerr:colName:fluxerr_z  
+name:UVUDF-HST_WFC3_IR_F125W       flux:colName:flux_j   fluxerr:colName:fluxerr_j   
+name:UVUDF-HST_WFC3_IR_F160W       flux:colName:flux_h   fluxerr:colName:fluxerr_h    
