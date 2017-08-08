@@ -46,7 +46,7 @@ SHRINK TEMPLATES WL RANGE = 900 60000
 
 FILTERS THROUGHPUTS = $BEAGLE_FILTERS/test.fits
 
-FILTERS CONFIGURATION = $BEAGLE_FILTERS/filters_config_UVUDF_test.dat
+FILTERS CONFIGURATION = $BEAGLE_FILTERS/filters_config_UVUDF.dat
 
 #****************************************************************
 #******************** (MOCK)  OBSERVATIONS **********************
