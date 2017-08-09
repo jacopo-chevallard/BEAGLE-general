@@ -1,12 +1,21 @@
-# It contains the filters to be used when calculating only photmetric models
-#redshift:colName:spec_z
-#uncomment the above if you want to fit with a fixed redshift, also change param file to make redshift parameter 'fixed', rather than 'fitted'
+# The possible units that can be used are: Jy, milliJy, microJy, nanoJy
+# Alternatively one can pass a conversion factor to convert the fluxes in the
+# catalogue into [erg s^-1 cm^-2 Hz^-1], e.g.
+# flux:conversion:<conversion factor>
 units:microJy
+
+# Column in the photometric catalogue containinig the object IDs
 object_ID:colName:ID
 
+# List of photometric filters included in the input photometric catalogue
 name:UVUDF-HST_ACS_WFC_F435W       flux:colName:flux_B   fluxErr:colName:fluxerr_B
+
 name:UVUDF-HST_ACS_WFC_F606W       flux:colName:flux_V   fluxErr:colName:fluxerr_V 
+
 name:UVUDF-HST_ACS_WFC_F775W       flux:colName:flux_i   fluxErr:colName:fluxerr_i  
+
 name:UVUDF-HST_ACS_WFC_F850LP       flux:colName:flux_z   fluxErr:colName:fluxerr_z  
+
 name:UVUDF-HST_WFC3_IR_F125W       flux:colName:flux_j   fluxErr:colName:fluxerr_j   
+
 name:UVUDF-HST_WFC3_IR_F160W       flux:colName:flux_h   fluxErr:colName:fluxerr_h    

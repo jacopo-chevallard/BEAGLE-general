@@ -7,9 +7,6 @@ units:microJy
 # Column in the photometric catalogue containinig the object IDs
 object_ID:colName:ID
 
-# Column in the photometric catalogue containinig the object redshift
-redshift:colName:z_spec
-
 # List of photometric filters included in the input photometric catalogue
 name:UVUDF-HST_WFC3_UVIS_F225W       min_rel_err:0.02       flux:colName:FLUX_F225W    fluxErr:colName:FLUXERR_F225W       
 
