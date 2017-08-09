@@ -46,6 +46,10 @@ FILTERS CONFIGURATION = $BEAGLE_FILTERS/filters_fit_photometry_example.dat
 
 PHOTOMETRIC CATALOGUE = $BEAGLE_DATA/cat_fit_photometry_example.fits
 
+# Uncomment the line below to fix the redshift to the spec-z value present in
+# the photometric catalogue (see sec 3.7.1 of the Beagle manual, version 0.17.1)
+#PRIORS CATALOGUE = $BEAGLE_DATA/cat_fit_photometry_example.fits
+
 #****************************************************************
 #******************** IGM ABSORPTION *******
 #****************************************************************
@@ -95,6 +99,10 @@ PDF SAMPLER FILE = $BEAGLE_PARAM_DIR/MCMC_example.param
 
 
 PARAMETER  = name:redshift     type:fitted  order_priority:0    prior:distribution:uniform  prior:range:[0.,15.] 
+# Uncomment the line below, and comment out the line above, to use the spec-z
+# in the photometric catalogue instead of letting Beagle determine a photo-z
+# together with the other parameters (see sec 3.7.1 of the Beagle manual, version 0.17.1)
+#PARAMETER = name:redshift      type:fitted  prior:distribution:dirac  prior:colName:spec_z
 
 PARAMETER  = name:nebular_logU type:dependent
 
