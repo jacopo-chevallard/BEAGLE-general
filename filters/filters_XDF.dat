@@ -7,11 +7,11 @@ units:nanoJy
 
 object_ID:colName:ID
 
-name:UVUDF-HST_ACS_WFC_F435W              min_rel_err:0.02       flux:colName:FLUX_F435W    fluxErr:colName:FLUXERR_F435W         
-name:UVUDF-HST_ACS_WFC_F606W              min_rel_err:0.02       flux:colName:FLUX_F606W    fluxErr:colName:FLUXERR_F606W         
-name:UVUDF-HST_ACS_WFC_F775W              min_rel_err:0.02       flux:colName:FLUX_F775W    fluxErr:colName:FLUXERR_F775W         
-name:UVUDF-HST_ACS_WFC_F850LP             min_rel_err:0.02       flux:colName:FLUX_F850LP   fluxErr:colName:FLUXERR_F850LP        
-name:UVUDF-HST_WFC3_IR_F105W             min_rel_err:0.02       flux:colName:FLUX_F105W    fluxErr:colName:FLUXERR_F105W         
-name:UVUDF-HST_WFC3_IR_F125W             min_rel_err:0.02       flux:colName:FLUX_F125W    fluxErr:colName:FLUXERR_F125W         
-name:UVUDF-HST_WFC3_IR_F140W             min_rel_err:0.02       flux:colName:FLUX_F140W    fluxErr:colName:FLUXERR_F140W         
-name:UVUDF-HST_WFC3_IR_F160W             min_rel_err:0.02       flux:colName:FLUX_F160W    fluxErr:colName:FLUXERR_F160W         
+name:UVUDF-HST_ACS_WFC_F435W              min_rel_err:0.02       flux:colName:_WFC_F435W_APP    fluxErr:colName:_WFC_F435W_APP_ERR         
+name:UVUDF-HST_ACS_WFC_F606W              min_rel_err:0.02       flux:colName:_WFC_F606W_APP    fluxErr:colName:_WFC_F606W_APP_ERR         
+name:UVUDF-HST_ACS_WFC_F775W              min_rel_err:0.02       flux:colName:_WFC_F775W_APP    fluxErr:colName:_WFC_F775W_APP_ERR         
+name:UVUDF-HST_ACS_WFC_F850LP             min_rel_err:0.02       flux:colName:_WFC_F850W_APP   fluxErr:colName:_WFC_F850W_APP_ERR        
+name:UVUDF-HST_WFC3_IR_F105W             min_rel_err:0.02       flux:colName:_WFC3_F105W_APP    fluxErr:colName:_WFC3_F105W_APP_ERR       
+name:UVUDF-HST_WFC3_IR_F125W             min_rel_err:0.02       flux:colName:_WFC3_F125W_APP    fluxErr:colName:_WFC3_F125W_APP_ERR         
+name:UVUDF-HST_WFC3_IR_F140W             min_rel_err:0.02       flux:colName:_WFC3_F140W_APP    fluxErr:colName:_WFC3_F140W_APP_ERR         
+name:UVUDF-HST_WFC3_IR_F160W             min_rel_err:0.02       flux:colName:_WFC3_F160W_APP    fluxErr:colName:_WFC3_F160W_APP_ERR         

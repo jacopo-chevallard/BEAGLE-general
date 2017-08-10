@@ -37,7 +37,7 @@ PHOTOMETRIC CATALOGUE = $BEAGLE_DATA/spectro_photometric_fitting_example_photome
 # ******************* SPECTROSCOPY *****************************
 #****************************************************************
 
-LIST OF SPECTRA = $BEAGLE_DATA/spectra/spectro_photometric_fit_example_spectra.list
+LIST OF SPECTRA = $BEAGLE_DATA/spectra/spectra.list
 
 # Example: FITS table
 SPECTRUM FILE DESCRIPTION =   wl:colName:WAVELENGTH wl:conversion:1.E+10 flux:colName:FLUX  fluxerr:colName:NOISE redshift:keyword:REDSHIFT
