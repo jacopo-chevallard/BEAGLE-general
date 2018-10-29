@@ -1,0 +1,14 @@
+[
+
+    {
+        "suffix" : "3color",
+        "quantities" : ["NLy", "NHeI", "NHeII", "SNR/yr/Lo", "N(BH)",
+        "N(NS)", "PNBR/yr/Lo", "N(WD)"]
+    },
+
+    {
+        "suffix":"4color",
+        "quantities":["M*_liv", "M_remnants", "M_ret_gas"]
+    }
+
+]
