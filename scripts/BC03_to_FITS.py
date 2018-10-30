@@ -7,6 +7,12 @@ import json
 from collections import OrderedDict
 import argparse
 
+# Name of the HDU extension containing the value of the template parameters
+_HDU_PARAMETERS_NAME = "PARAMETERS GRID"
+
+# Name of the HDU extension containing the template spectra and additional quantities
+_HDU_GRID_NAME = "SPECTRUM GRID"
+
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
@@ -36,9 +42,6 @@ if __name__ == '__main__':
 
     # Parameters defining the grid over which the template spectra are computed
     grid_params = ["age", "metallicity"]
-
-    # Other parameters
-    other_params = ["Fe_H", "X", "Y", "Z"]
 
     if args.json_file is not None:
         with open(args.json_file) as f:
@@ -160,7 +163,7 @@ if __name__ == '__main__':
       new_hdu.data[par] = _par_values
 
     # Name of the FITS extension
-    new_hdu.name = "PARAMETERS GRID"
+    new_hdu.name = _HDU_PARAMETERS_NAME
 
     # Append the HDU to the HDU list
     hdulist.append(new_hdu)
@@ -184,7 +187,7 @@ if __name__ == '__main__':
     nrows = len(grid["age"]) 
     print "nrows: ", nrows, len(grid["spectrum"])
     new_hdu = fits.BinTableHDU.from_columns(_cols, nrows=nrows)
-    new_hdu.name = "SPECTRUM GRID"
+    new_hdu.name = _HDU_GRID_NAME
 
     # Fill the hdu!
     for i in range(nrows):
@@ -200,6 +203,6 @@ if __name__ == '__main__':
     hdulist.append(new_hdu)
 
     # Finally, write the file to the disk!
-    file_name = "bc2003_hr_xmiless_chab_ssp.fits"
+    file_name = os.path.splitext(args.input_file)[0]+ ".fits"
     hdulist.writeto(file_name, overwrite=True)
 
