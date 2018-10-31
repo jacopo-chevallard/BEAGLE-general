@@ -7,6 +7,17 @@ import json
 from collections import OrderedDict
 import argparse
 
+# Name of the JSON dictionary containing the name of the grid parameters 
+_GRID_PARAM_KEY = "parameters"
+
+# Name of the JSON dictionary containing the additional quantities (e.g. from
+# the *color files) that will be included in the FITS file
+_ADDITIONAL_Q_KEY = "additional quantities"
+
+# Name of the JSON dictionary containing the pairs keyword:value that will be
+# added to the header of the _HDU_PARAMETERS_NAME extension
+_HEADER_KEY = "header"
+
 # Name of the HDU extension containing the value of the template parameters
 _HDU_PARAMETERS_NAME = "PARAMETERS GRID"
 
@@ -28,10 +39,11 @@ if __name__ == '__main__':
 
     parser.add_argument(
         '--JSON-file',
-        help="JSON file containing the configuration of the additional quantities that will be included in the FITS file",
+        help="JSON file containing the configuration of then templates that will be converted to FITS format",
         action="store", 
         type=str, 
-        dest="json_file"
+        dest="json_file",
+        required=True
     )
 
     # Get parsed arguments
@@ -40,12 +52,19 @@ if __name__ == '__main__':
     # File containing the list of files that will be integrated into a single FITS table
     mixtures = ascii.read(args.input_file, format="commented_header")
 
-    # Parameters defining the grid over which the template spectra are computed
-    grid_params = ["age", "metallicity"]
+    with open(args.json_file) as f:
+        json_data = json.load(f, object_pairs_hook=OrderedDict)
 
-    if args.json_file is not None:
-        with open(args.json_file) as f:
-            additional_quantities = json.load(f, object_pairs_hook=OrderedDict)
+    # Parameters defining the grid over which the template spectra are computed
+    grid_params = json_data[_GRID_PARAM_KEY]
+
+    additional_quantities = None
+    if _ADDITIONAL_Q_KEY in json_data:
+        additional_quantities = json_data[_ADDITIONAL_Q_KEY]
+
+    header = None
+    if _HEADER_KEY in json_data:
+        header = json_data[_HEADER_KEY]
 
     # Initialize empty dictionaries
     # One dictionary that will contain the actual spectra
@@ -113,7 +132,7 @@ if __name__ == '__main__':
 
 
             # Add the "additional quantities"
-            if args.json_file is not None:
+            if additional_quantities is not None:
                 for add in additional_quantities:
                     file_ = os.path.splitext(file_name)[0]+ "." + add["suffix"]
                     n_lines = sum(1 for line in open(file_))
@@ -162,6 +181,11 @@ if __name__ == '__main__':
       _par_values = np.unique(np.array(grid[par]))
       new_hdu.data[par] = _par_values
 
+    # Add header keywords
+    if header is not None:
+        for key, value in oeader.iteritems():
+            new_hdu.header[key] = value
+
     # Name of the FITS extension
     new_hdu.name = _HDU_PARAMETERS_NAME
 
@@ -178,14 +202,13 @@ if __name__ == '__main__':
     col = fits.Column(name="spectrum", format=str(_n) + 'E', dim=dim_str) ; cols.append(col)
 
     # Create other columns for the return fraction and so on
-    if args.json_file is not None:
+    if additional_quantities is not None:
         for add in additional_quantities:
             for q in add["quantities"]:
                 col = fits.Column(name=q, format='E') ; cols.append(col)
 
     _cols = fits.ColDefs(cols)
     nrows = len(grid["age"]) 
-    print "nrows: ", nrows, len(grid["spectrum"])
     new_hdu = fits.BinTableHDU.from_columns(_cols, nrows=nrows)
     new_hdu.name = _HDU_GRID_NAME
 
@@ -194,7 +217,7 @@ if __name__ == '__main__':
         for par in grid_params:
             new_hdu.data[par][i] = grid[par][i]
         new_hdu.data["spectrum"][i] = grid["spectrum"][i]
-        if args.json_file is not None:
+        if additional_quantities is not None:
             for add in additional_quantities:
                 for q in add["quantities"]:
                     new_hdu.data[q][i] = grid[q][i]
