@@ -175,8 +175,8 @@ if __name__ == '__main__':
     for par in grid_params:
       _par_values = np.unique(np.array(grid[par]))
       if args.split_files and par == 'metallicity':
-          n_metal = len(_par_values)
-          col = fits.Column(name=par, format='E')
+          n_metal = len(_par_values) ; dim_str = '(' + str(1) + ')'
+          col = fits.Column(name=par, format=str(1) + 'E', dim=dim_str)
           cols.append(col)
       else:
           _n = len(_par_values) ; dim_str = '(' + str(_n) + ')'
