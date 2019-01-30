@@ -46,6 +46,13 @@ if __name__ == '__main__':
         required=True
     )
 
+    parser.add_argument(
+        '--split-files',
+        help="Create one FITS file per metallicity",
+        action="store_true", 
+        dest="split_files"
+    )
+
     # Get parsed arguments
     args = parser.parse_args()    
 
@@ -152,8 +159,6 @@ if __name__ == '__main__':
                         else:
                             grid[q] = np.concatenate((grid[q], d_))
 
-    # We create a FITS Primary array, which will be the first extention of the output FITS file (it is mandatory)
-    hdulist = fits.HDUList([fits.PrimaryHDU()])
 
     # Create the columns which will hold the parameter grid
     cols = list()
@@ -166,66 +171,93 @@ if __name__ == '__main__':
     col = fits.Column(name="FWHM", format=str(_n) + 'E', dim=dim_str, unit='Ang') ; cols.append(col)
 
     # The other columns containing the parameter grid
+    n_metal = 1
     for par in grid_params:
       _par_values = np.unique(np.array(grid[par]))
-      _n = len(_par_values) ; dim_str = '(' + str(_n) + ')'
-      col = fits.Column(name=par, format=str(_n) + 'E', dim=dim_str)
-      cols.append(col)
+      if args.split_files and par == 'metallicity':
+          n_metal = len(_par_values)
+          col = fits.Column(name=par, format='E')
+          cols.append(col)
+      else:
+          _n = len(_par_values) ; dim_str = '(' + str(_n) + ')'
+          col = fits.Column(name=par, format=str(_n) + 'E', dim=dim_str)
+          cols.append(col)
 
-    _cols = fits.ColDefs(cols)
-    new_hdu = fits.BinTableHDU.from_columns(_cols, nrows=1)
+    initial_cols = fits.ColDefs(cols)
 
-    # Fill the columns containing the parameter grid values
-    new_hdu.data["wavelengths"] = data["wl"]
-    for par in grid_params:
-      _par_values = np.unique(np.array(grid[par]))
-      new_hdu.data[par] = _par_values
+    for i in range(n_metal):
 
-    # Add header keywords
-    if header is not None:
-        for key, value in oeader.iteritems():
-            new_hdu.header[key] = value
+        # We create a FITS Primary array, which will be the first extention of the output FITS file (it is mandatory)
+        hdulist = fits.HDUList([fits.PrimaryHDU()])
+        new_hdu = fits.BinTableHDU.from_columns(initial_cols, nrows=1)
 
-    # Name of the FITS extension
-    new_hdu.name = _HDU_PARAMETERS_NAME
-
-    # Append the HDU to the HDU list
-    hdulist.append(new_hdu)
-
-    # Create the columns which will hold the spectrum at each point in the grid
-    cols = list()
-    for par in grid_params:
-      col = fits.Column(name=par, format='E') ; cols.append(col)
-      
-    _n = len(grid["spectrum"][0])
-    dim_str = '(' + str(_n) + ')'
-    col = fits.Column(name="spectrum", format=str(_n) + 'E', dim=dim_str) ; cols.append(col)
-
-    # Create other columns for the return fraction and so on
-    if additional_quantities is not None:
-        for add in additional_quantities:
-            for q in add["quantities"]:
-                col = fits.Column(name=q, format='E') ; cols.append(col)
-
-    _cols = fits.ColDefs(cols)
-    nrows = len(grid["age"]) 
-    new_hdu = fits.BinTableHDU.from_columns(_cols, nrows=nrows)
-    new_hdu.name = _HDU_GRID_NAME
-
-    # Fill the hdu!
-    for i in range(nrows):
+        # Fill the columns containing the parameter grid values
+        new_hdu.data["wavelengths"] = data["wl"]
         for par in grid_params:
-            new_hdu.data[par][i] = grid[par][i]
-        new_hdu.data["spectrum"][i] = grid["spectrum"][i]
+            
+          if args.split_files and par == 'metallicity':
+              _par_values = np.unique(np.array(grid[par]))
+              new_hdu.data[par] = _par_values[i]
+              metallicity =  _par_values[i]
+          else:
+              _par_values = np.unique(np.array(grid[par]))
+              new_hdu.data[par] = _par_values
+
+        # Add header keywords
+        if header is not None:
+            for key, value in header.iteritems():
+                new_hdu.header[key] = value
+
+        # Name of the FITS extension
+        new_hdu.name = _HDU_PARAMETERS_NAME
+
+        # Append the HDU to the HDU list
+        hdulist.append(new_hdu)
+
+        # Create the columns which will hold the spectrum at each point in the grid
+        cols = list()
+        for par in grid_params:
+          col = fits.Column(name=par, format='E') ; cols.append(col)
+          
+        _n = len(grid["spectrum"][0])
+        dim_str = '(' + str(_n) + ')'
+        col = fits.Column(name="spectrum", format=str(_n) + 'E', dim=dim_str) ; cols.append(col)
+
+        # Create other columns for the return fraction and so on
         if additional_quantities is not None:
             for add in additional_quantities:
                 for q in add["quantities"]:
-                    new_hdu.data[q][i] = grid[q][i]
+                    col = fits.Column(name=q, format='E') ; cols.append(col)
 
-    # Append the HDU to the HDU list
-    hdulist.append(new_hdu)
+        _cols = fits.ColDefs(cols)
+        nrows = len(grid["age"])/n_metal
 
-    # Finally, write the file to the disk!
-    file_name = os.path.splitext(args.input_file)[0]+ ".fits"
-    hdulist.writeto(file_name, overwrite=True)
+        new_hdu = fits.BinTableHDU.from_columns(_cols, nrows=nrows)
+        new_hdu.name = _HDU_GRID_NAME
+
+        # Fill the hdu!
+        j = 0
+        for i in range(len(grid["age"])):
+            if args.split_files:
+                if grid["metallicity"][i] != metallicity:
+                    continue
+            for par in grid_params:
+                new_hdu.data[par][j] = grid[par][i]
+            new_hdu.data["spectrum"][j] = grid["spectrum"][i]
+            if additional_quantities is not None:
+                for add in additional_quantities:
+                    for q in add["quantities"]:
+                        new_hdu.data[q][j] = grid[q][i]
+            j += 1
+
+        # Append the HDU to the HDU list
+        hdulist.append(new_hdu)
+
+        # Finally, write the file to the disk!
+        if args.split_files:
+            file_name = os.path.splitext(args.input_file)[0] + "_Z_" + str(metallicity) + ".fits"
+        else:
+            file_name = os.path.splitext(args.input_file)[0]+ ".fits"
+
+        hdulist.writeto(file_name, overwrite=True)
 

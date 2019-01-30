@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import argparse
+from collections import OrderedDict
 from astropy.io import fits
 from astropy.io import ascii
 import numpy as np
@@ -87,6 +88,47 @@ if __name__ == '__main__':
         dest="seed"
     )
 
+    parser.add_argument(
+        '--band-list',
+        help="List of column names containing photometric bands",
+        action="store", 
+        type=str, 
+        nargs="+",
+        dest="band_list"
+    )
+
+    parser.add_argument(
+        '--error-prefix',
+        help="Prefix indicating the columns containing the flux errors",
+        action="store", 
+        type=str, 
+        dest="error_prefix"
+    )
+
+    parser.add_argument(
+        '--error-suffix',
+        help="Suffix indicating the columns containing the flux errors",
+        action="store", 
+        type=str, 
+        dest="error_suffix",
+        default="_err"
+    )
+
+    parser.add_argument(
+        '--SN-threshold',
+        help="S/N threshold to select objects",
+        action="store", 
+        type=np.float32, 
+        dest="SN_threshold"
+    )
+
+    parser.add_argument(
+        '--SN-n-bands',
+        help="Minimum number of photometric bands that must satisfy the S/N threshold to select objects",
+        action="store", 
+        type=np.int, 
+        dest="SN_n_bands"
+    )
 
     # Get parsed arguments
     args = parser.parse_args()    
@@ -94,24 +136,54 @@ if __name__ == '__main__':
     # Seed for random number generator
     np.random.seed(args.seed)
 
+    # Open the input photometric catalogue
+    hdu = fits.open(args.input)[1]
+    n_rows = len(hdu.data[args.ID_key])
+    mask = np.zeros(n_rows, dtype=bool)
+    ID_to_copy = None
+
     # Check if input and output file coincides
     if args.output == args.input:
         raise IOError('Ouput and input filenames coincide!!')
 
     if args.ID_list is not None:
-
         ID_to_copy = [item for item in args.ID_list.split(',')]
-
     elif args.ID_file_list is not None:
-        
         if args.ID_file_list.endswith(('fits', 'fit', 'FITS', 'FIT')):
             tmp = fits.open(args.ID_file_list)[1].data
         else:
             tmp = ascii.read(args.ID_file_list, Reader=ascii.basic.CommentedHeader)
-
         ID_to_copy = tmp[args.ID_key]
 
-    hdu =  fits.open(args.input)[1]
+    # Check if you want to select only objects satisfying a S/N in given bands
+    if args.SN_threshold is not None:
+        if args.band_list is None:
+            parser.error("The option '--SN-threshold' requires the option '--band-list'")
+
+        if args.SN_n_bands is None:
+            parser.error("The option '--SN-threshold' requires the option '--SN-n-bands'")
+
+        SN = OrderedDict()
+        n_bands = len(args.band_list)
+        SN_mask = np.zeros((n_rows,n_bands), dtype=int)
+
+        for i, band in enumerate(args.band_list):
+            print "band: ", band
+            if args.error_prefix is not None:
+                err = args.error_prefix + band
+            else:
+                err = band + args.error_suffix
+
+            SN[band] = hdu.data[band]/hdu.data[err]
+            loc = np.where(hdu.data[err] < 0.)[0]
+            SN[band][loc] = -99.
+            
+            loc = np.where(SN[band] >= args.SN_threshold)[0]
+            SN_mask[loc, i] = 1
+
+        SN_selec_mask = np.sum(SN_mask, axis=1)
+        loc = np.where(SN_selec_mask >= args.SN_n_bands)[0]
+        mask[loc] = True
 
     # Select some columns from the original file
     #new_columns = (hdu.columns['ID'], hdu.columns['SPECZ'])
@@ -127,29 +199,22 @@ if __name__ == '__main__':
     #IDs_low_p= (5708, 6714, 22925, 22230, 5642, 33821, 5338, 9177, 24394, 9177, 2611, 511, 76)
     #ID_to_copy = np.array(IDs_low_p+IDs_high_p, dtype=np.int)
 
-    n_rows = len(hdu.data[args.ID_key])
-    mask = np.zeros(n_rows, dtype=bool)
     if args.n_objects is not None:
-        
         if args.n_objects < 1:
             n_objects = ceil(args.n_objects*n_rows)
         else:
             n_objects = int(args.n_objects)
-
         mask[0:n_objects] = True
-
         if args.shuffle:
             mask = np.random.permutation(mask)
 
-    else:
-
-
+    elif ID_to_copy is not None:
         if isinstance(hdu.data[args.ID_key][0], basestring):
             for ID in ID_to_copy:
                 #print "ID----> ", ID
                 #indx = np.where(hdu.data['ID'] == ID)[0]
                 #print "indx: ", indx
-                mask[hdu.data['ID'] == ID] = True
+                mask[hdu.data[args.ID_key] == ID] = True
         else:
             for i in range(len(ID_to_copy)):
                 i1 = bisect.bisect_left(hdu.data[args.ID_key], ID_to_copy[i])
@@ -163,6 +228,4 @@ if __name__ == '__main__':
                     mask[i1] = True
 
     hdu.data = hdu.data[mask]
-
     hdu.writeto(args.output, overwrite=args.overwrite)
-
