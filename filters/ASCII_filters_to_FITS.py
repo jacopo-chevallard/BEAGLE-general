@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+import os
 import numpy as np
 from astropy.table import Table
 from collections import OrderedDict
@@ -30,14 +31,19 @@ if __name__ == '__main__':
     # Get parsed arguments
     args = parser.parse_args()    
 
+    if args.output is None:
+        args.output = os.path.splitext(args.input)[0] + '.fits'
+
     f_in = open(args.input, 'r')
 
     data = OrderedDict()
 
+    n_filters = 0
+
     for line in f_in:
 
         if line.startswith("#"):
-
+            n_filters += 1
             line = line.strip()
 
             if data:
@@ -47,7 +53,11 @@ if __name__ == '__main__':
 
             line  = line.replace("(", "")
             line  = line.replace(")", "")
-            band = line.split(' ')[1]
+            line_split = line.split(' ')
+            if len(line_split) > 2:
+                band = line_split[1] + '_' + line_split[2]
+            else:
+                band = line_split[1]
             url = ""
             for split in line.split(' '):
                 if split.startswith("http") or  split.startswith("www"):
@@ -60,6 +70,8 @@ if __name__ == '__main__':
         wl_, t_wl_ = line.split()
 
         transmission.append((wl_, t_wl_))
+
+    print "Total number of filters: ", n_filters 
 
     data[band].update({"transmission":np.array(transmission)})
 
@@ -124,4 +136,4 @@ if __name__ == '__main__':
     hdulist.append(tbhdu)
 
     # Finally, write the file to the disk!
-    hdulist.writeto(args.output, clobber=True)
+    hdulist.writeto(args.output, overwrite=True)
