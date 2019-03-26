@@ -16,12 +16,8 @@ SEED = 21083988
 TEMPLATES NEBULAR = $BEAGLE_TEMPLATES/ineb_Jan16_C100/cb2013_n2_mup100_N015_O01_deplO70_C100_Jan16
 EMISSION LINES CONFIGURATION = $BEAGLE_TEMPLATES/ineb_Jan16_C100/cb2013_n2_mup100_N015_O01_deplO70_C100_Jan16_line_wavelengths.dat
  
-TEMPLATES ALPHA ELEMENTS =
-ALPHA DIFFERENTIAL =
-
 #SHRINK TEMPLATES WL RANGE = 500 15000
 #REBIN TEMPLATES = 10
-
 
 #****************************************************************
 # ******************* PHOTOMETRY *****************************
@@ -42,88 +38,15 @@ LIST OF SPECTRA = $BEAGLE_DATA/spectra/spectra.list
 # Example: FITS table
 SPECTRUM FILE DESCRIPTION =   wl:colName:WAVELENGTH wl:conversion:1.E+10 flux:colName:FLUX  fluxerr:colName:NOISE redshift:keyword:REDSHIFT
 
-FIT SPECTRUM = T
-
 # Example with all possible tokens
 #SPECTRUM FILE DESCRIPTION = flux:conversion:1.E-17 wl:colNum:1 wl:dispersion:ln wl:conversion:1.E+04 wl:type:vacuum redshift:keyword:Z flux:colNum:2  fluxerr:colNum:3 mask:colNum:4  sky:colNum:5      min_rel_err:0.02
-
-# Observations have LSF?
-#LSF_PARAMETER = name:lsf_type              type:fixed    char_value:gaussian
-#LSF_PARAMETER = name:lsf_sigma_coeff-1     type:fitted   prior:distribution:uniform  prior:range:[0.,10.]
-#LSF_PARAMETER = name:lsf_sigma_coeff-2     type:fitted   prior:distribution:uniform  prior:range:[-5.,5.]
-#LSF_PARAMETER = name:lsf_sigma_coeff-3     type:fitted   prior:distribution:uniform  prior:range:[-5.,5.]
-#LSF_PARAMETER = name:lsf_sigma_coeff-4     type:fitted   prior:distribution:uniform  prior:range:[-5.,5.]
 #
-#LSF_PARAMETER = name:lsf_center_coeff-1     type:fitted   prior:distribution:uniform  prior:range:[-10.,10.]
-#LSF_PARAMETER = name:lsf_center_coeff-2     type:fitted   prior:distribution:uniform  prior:range:[-10.,10.]
-#LSF_PARAMETER = name:lsf_type              type:fixed    char_value:box
-#LSF_PARAMETER = name:lsf_sigma_coeff-1     type:fixed    value:2.31
-#LSF_PARAMETER = name:lsf_sigma_coeff-2     type:fixed    value:-45.29
-#LSF_PARAMETER = name:lsf_sigma_coeff-3     type:fixed    value:341.69
-#LSF_PARAMETER = name:lsf_sigma_coeff-4     type:fixed    value:-1223.19
-#LSF_PARAMETER = name:lsf_sigma_coeff-5     type:fixed    value:1971.37
-#LSF_PARAMETER = name:lsf_sigma_coeff-6     type:fixed    value:-755.28
-
-# Need to mask any region from observations?
-# (For instance because of bas sky subtraction, unre;oiabel flux calibrations, etc...)
-# MASK OBSERVATION REGIONS = range-1:[5700, 5900.] range-2:[6500., -1.]
-
-
-# Need to mask any region from the templates?
-# (For instance because of different resolutions, use of empirical/theoretical stellar libraries)
-#MASK TEMPLATE REGIONS = range-1:[-1., 3300.] range-2:[6500., -1.]
-
-# How do you treat continuum mis-calibrations between observed and model spectra?
-# - rectify --->
-# - polynomial --->
-#FLUX CALIBRATION CORRECTION = type:legendre degree:3
-#FLUX CALIBRATION CORRECTION = type:rectify
-
-# Do you want to mask emission lines?
-#MASK EMISSION LINES = F
-
-# Do you want to mask bad sky subtraction?
-#MASK BAD SKY = T
-
-#****************************************************************
-# ******************* MOCK OBSERVATIONS *****************************
-#****************************************************************
-#MOCK CATALOGUE NAME = my_first_test
-
-#MOCK INPUT PARAMETERS = 
-
-#N_OBJECTS = 10
-
 #****************************************************************
 # ******************* IGM ABSORPTION *******
 #****************************************************************
-#
 
 IGM ABSORPTION = Inoue
 
-# File containing set of radiativa transfer (RT) calculations of dust attenuation of starlight
-#RT CALCULATIONS = Tuffs_bulge_NEW-28-11.dat Tuffs_thick_NEW-28-11.dat Tuffs_thin_NEW-28-11.dat
-#RT COMPONENTS NAMES = bulge thick_disc thin_disc
-
-#****************************************************************
-# ******************* STAR FORMATION *****************************
-#****************************************************************
-
-# File containing a library of star formation histories from semi-analytic models
-# SEMI-ANALYTIC STAR FORMATION = /Users/jacopo/bc99lx/Mock/F90/list9sfh_TOT.bin
-# SEMI-ANALYTIC STAR FORMATION = /tmp_mnt/broque/poubelle1/tmp/chevalla/Mock/F90/list9sfh_TOT.bin
-# If "STAR FORMATION HISTORY = 3" filename containing the user supplied SFH
-#SIMULATED SF AND ChE HISTORIES = $BEAGLE_SF_ChE/Blaizot/Joao-refSim-z1/Joao-refSim-z1.sfh
-
-# Whether you want to use the simulated SF and ChE histories in the order in which they are read, 
-# or rather you want ot randomize this order
-RANDOMIZE SIMULATED SF AND ChE = T
-
-# File containing a user supplied SF and ChE history, i.e. (at least) 3 columns age, SFR and Z
-USER SUPPLIED SFH = output.my_sfr
-
-# Normalize the mass formed to 1 M_sun ? this means that all SED will be rescaled so as M_star + M_gas = M_tot = 1
-NORMALIZE TO 1 M_SUN = F
 
 # If you model the star formation and chemical enrichment history of galaxies in a non parametric way, 
 # then you can describe the SF and CE history my computing the mass and mass-weighted metallicity in 
@@ -158,7 +81,6 @@ SF_PARAMETER  = name:current_sfr_timescale        type:fixed  value:7.
 #****************************************************************
 
 RESULTS DIRECTORY = $BEAGLE_RESULTS/spectro_photometric_fit_example
-
 
 PRINT PHOTOMETRY = F
 PRINT SPECTRUM = T
