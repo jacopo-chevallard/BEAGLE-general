@@ -19,10 +19,10 @@ _ADDITIONAL_Q_KEY = "additional quantities"
 _HEADER_KEY = "header"
 
 # Name of the HDU extension containing the value of the template parameters
-_HDU_PARAMETERS_NAME = "PARAMETERS GRID"
+_HDU_PARAMETERS_NAME = "PARAMETERS"
 
 # Name of the HDU extension containing the template spectra and additional quantities
-_HDU_GRID_NAME = "SPECTRUM GRID"
+_HDU_CONTINUUM_NAME = "CONTINUUM"
 
 if __name__ == '__main__':
 
@@ -233,7 +233,7 @@ if __name__ == '__main__':
         nrows = len(grid["age"])/n_metal
 
         new_hdu = fits.BinTableHDU.from_columns(_cols, nrows=nrows)
-        new_hdu.name = _HDU_GRID_NAME
+        new_hdu.name = _HDU_CONTINUUM_NAME
 
         # Fill the hdu!
         j = 0
