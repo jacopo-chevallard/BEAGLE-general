@@ -451,8 +451,9 @@ if __name__ == '__main__':
         row = 0
         for i in range(len(grid["age"])):
             if args.split_files:
-                if grid["metallicity"][n] != metallicity:
+                if grid["metallicity"][i] != metallicity:
                     continue
+            #print "row, i:  ", row, i
             for par in grid_params:
                 new_hdu.data[par][row] = grid[par][i]
             new_hdu.data[_SPECTRUM_KEY][row] = grid[_SPECTRUM_KEY][i]
@@ -494,7 +495,7 @@ if __name__ == '__main__':
         row = 0
         for i in range(len(grid["age"])):
             if args.split_files:
-                if grid["metallicity"][n] != metallicity:
+                if grid["metallicity"][i] != metallicity:
                     continue
 
             if grid[_LINE_LUMIN_KEY][i] is None:
