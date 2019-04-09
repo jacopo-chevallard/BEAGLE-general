@@ -87,7 +87,7 @@ if __name__ == '__main__':
     # Cycle across all input files
     for m in mixtures:
 
-        file_name = m["file_name"]
+        file_name = os.path.expandvars(m["file_name"])
         with open(file_name, 'r') as f:
 
             # Read time steps
@@ -141,7 +141,7 @@ if __name__ == '__main__':
             # Add the "additional quantities"
             if additional_quantities is not None:
                 for add in additional_quantities:
-                    file_ = os.path.splitext(file_name)[0]+ "." + add["suffix"]
+                    file_ = os.path.expandvars(os.path.splitext(file_name)[0]+ "." + add["suffix"])
                     n_lines = sum(1 for line in open(file_))
                     header_start = n_lines - n_age
                     data_ = ascii.read(file_, format="commented_header", header_start=header_start)

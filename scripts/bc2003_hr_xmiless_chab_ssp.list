@@ -1,8 +1,8 @@
 # file_name                         metallicity
-bc2003_hr_xmiless_m22_chab_ssp.ised_ASCII      0.0001
-bc2003_hr_xmiless_m32_chab_ssp.ised_ASCII      0.0004
-bc2003_hr_xmiless_m42_chab_ssp.ised_ASCII      0.004
-bc2003_hr_xmiless_m52_chab_ssp.ised_ASCII      0.008
-bc2003_hr_xmiless_m62_chab_ssp.ised_ASCII      0.02
-bc2003_hr_xmiless_m72_chab_ssp.ised_ASCII      0.05
-bc2003_hr_xmiless_m82_chab_ssp.ised_ASCII      0.1
+$BEAGLE_TEMPLATES/bc03/bc2003_hr_xmiless_m22_chab_ssp.ised_ASCII      0.0001
+$BEAGLE_TEMPLATES/bc03/bc2003_hr_xmiless_m32_chab_ssp.ised_ASCII      0.0004
+$BEAGLE_TEMPLATES/bc03/bc2003_hr_xmiless_m42_chab_ssp.ised_ASCII      0.004
+$BEAGLE_TEMPLATES/bc03/bc2003_hr_xmiless_m52_chab_ssp.ised_ASCII      0.008
+$BEAGLE_TEMPLATES/bc03/bc2003_hr_xmiless_m62_chab_ssp.ised_ASCII      0.02
+$BEAGLE_TEMPLATES/bc03/bc2003_hr_xmiless_m72_chab_ssp.ised_ASCII      0.05
+$BEAGLE_TEMPLATES/bc03/bc2003_hr_xmiless_m82_chab_ssp.ised_ASCII      0.1
