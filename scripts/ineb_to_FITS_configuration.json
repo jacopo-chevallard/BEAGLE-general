@@ -1,0 +1,15 @@
+{
+
+    "parameters" : ["age", "metallicity", "nebular_logU", "nebular_xi"],
+
+    "emission_lines_list" : "$BEAGLE_TEMPLATES/ineb_June16/mup100/cb2016_n2_mup100_N015_O01_deplO70_C100_Jan16_line_wavelengths_may2017.dat",
+
+    "header" : 
+        {
+            "IMF" : "Chabrier",
+            "M_LOW" : 0.1,
+            "M_UP" : 100.0,
+            "TRACKS" : " Padova (1994) + S. Charlot (1997)"
+        }
+
+}
