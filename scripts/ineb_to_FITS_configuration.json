@@ -1,5 +1,7 @@
 {
 
+    "templates_list" : "cb2016_n2_mup100_N015_O01_deplO70_C100_June16_reduced.list",
+
     "parameters" : ["age", "metallicity", "nebular_logU", "nebular_xi"],
 
     "emission_lines_list" : "$BEAGLE_TEMPLATES/ineb_June16/mup100/cb2016_n2_mup100_N015_O01_deplO70_C100_Jan16_line_wavelengths_may2017.dat",
@@ -10,6 +12,17 @@
             "M_LOW" : 0.1,
             "M_UP" : 100.0,
             "TRACKS" : " Padova (1994) + S. Charlot (1997)"
+        },
+
+    "additional quantities" : [
+        
+        {
+            "prefix":"cb2016",
+            "folder": "$BEAGLE_TEMPLATES/ineb_June16/mup100",
+            "suffix":"4color",
+            "quantities":["M*_liv", "M_remnants", "M_ret_gas"]
         }
+
+    ]
 
 }

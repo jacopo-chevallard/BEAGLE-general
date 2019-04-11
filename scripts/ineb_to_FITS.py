@@ -4,6 +4,7 @@ import numpy as np
 from astropy.io import fits, ascii
 import os
 import json
+import glob
 from collections import OrderedDict
 import argparse
 import struct as struct
@@ -18,6 +19,8 @@ _ADDITIONAL_Q_KEY = "additional quantities"
 # Name of the JSON dictionary containing the pairs keyword:value that will be
 # added to the header of the _HDU_PARAMETERS_NAME extension
 _HEADER_KEY = "header"
+
+_TEMPLATES_LIST_KEY = "templates_list"
 
 _LINES_LIST_KEY = "emission_lines_list"
 
@@ -45,19 +48,23 @@ def add_quantity_to_grid(label, quantity, grid, repeat=1):
     else:
         grid[label] = np.concatenate((grid[label], np.repeat(quantity, repeat)))
 
+def extract_metallicity(file_name, split='_'):
+
+    spl = os.path.basename(file_name).split(split)
+    for s in spl:
+        if s.startswith('z'):
+            _s = s[1:1] + '.' + s[2:]
+            try:
+                Z = float(_s)
+            except:
+                Z = -99.99
+            break
+
+    return Z, s
 
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        '-i', '--input',
-        help="ASCII file containing the list of *ineb files that will be converted into FITS format",
-        action="store", 
-        type=str, 
-        dest="input_file", 
-        required=True
-    )
 
     parser.add_argument(
         '--JSON-file',
@@ -87,11 +94,12 @@ if __name__ == '__main__':
     # Get parsed arguments
     args = parser.parse_args()    
 
-    # File containing the list of files that will be integrated into a single FITS table
-    templates = ascii.read(args.input_file, format="commented_header")
-
     with open(args.json_file) as f:
         json_data = json.load(f, object_pairs_hook=OrderedDict)
+
+    # File containing the list of files that will be integrated into a single FITS table
+    input_file_list = json_data[_TEMPLATES_LIST_KEY]
+    templates = ascii.read(input_file_list, format="commented_header")
 
     # Parameters defining the grid over which the template spectra are computed
     grid_params = json_data[_GRID_PARAM_KEY]
@@ -338,6 +346,18 @@ if __name__ == '__main__':
             if additional_quantities is not None:
                 for add in additional_quantities:
                     file_ = os.path.expandvars(os.path.splitext(file_name)[0]+ "." + add["suffix"])
+                    if not os.path.isfile(file_):
+                        Z, Z_str = extract_metallicity(file_)
+                        _dir = os.path.dirname(file_name)
+                        if "folder" in add:
+                            _dir = os.path.expandvars(add["folder"])
+                        _regex = ''
+                        if "prefix" in add:
+                            _regex = _regex + add["prefix"] + '*'
+                        _regex = _regex + Z_str + '*' + add["suffix"]
+                        _regex = os.path.join(_dir, _regex)
+                        file_ = glob.glob(_regex)[0]
+
                     n_lines = sum(1 for line in open(file_))
                     header_start = n_lines - n_age
                     data_ = ascii.read(file_, format="commented_header", header_start=header_start)
@@ -520,9 +540,9 @@ if __name__ == '__main__':
 
         # Finally, write the file to the disk!
         if args.split_files:
-            file_name = os.path.splitext(args.input_file)[0] + "_Z_" + str(metallicity) + ".fits"
+            file_name = os.path.splitext(input_file_list)[0] + "_Z_" + str(metallicity) + ".fits"
         else:
-            file_name = os.path.splitext(args.input_file)[0]+ ".fits"
+            file_name = os.path.splitext(input_file_list)[0]+ ".fits"
 
         hdulist.writeto(file_name, overwrite=True)
 
