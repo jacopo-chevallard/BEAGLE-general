@@ -10,3 +10,7 @@ Contains example files for:
 * producing a mock catalogue using 'from_file' option (BEAGLE_mock_catalogue_from_file.param)
 * fitting photometry (fit_photometry_example.param)
 * - to be included - *fitting a spectrum (fit_spectrum_example.param)*
+
+## Beagle ChangeLog
+
+From here you can access the [Beagle ChangeLog](https://beagle.netlify.com/), which tracks all changes that are incrorporated into the new releases published through [DockerHub](https://cloud.docker.com/u/beagletool/repository/docker/beagletool/beagle)  
