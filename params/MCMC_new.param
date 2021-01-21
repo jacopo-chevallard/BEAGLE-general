@@ -11,7 +11,7 @@ BURN IN = 0.2
 
 # Maximum number of iterations of the chain. The pdf sampling will stop if it has reached converegnce *or*
 # if it has reached the maximum number of iterations
-MAX ITER = 1000000
+MAX ITER = 10000
 
 # Number of walkers to be used in the affine-invariant algorithm
 NUMBER OF WALKERS = 300
