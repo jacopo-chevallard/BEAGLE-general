@@ -1,0 +1,6 @@
+object_ID:colName:sbid
+
+wl:6562.82 continuum_left:[6535.,6540.] continuum_right:[6590.,6595.] lum:colName:H_alpha_flux lumErr:colName:H_alpha_err print:T label:H_alpha
+wl:4861.33 continuum_left:[4820.,4830.] continuum_right:[4880.,4890.] lum:colName:H_beta_flux lumErr:colName:H_beta_err print:T label:H_beta
+wl:4340.47 continuum_left:[4315.,4320.] continuum_right:[4375.,4385.] lum:colName:H_gamma_flux lumErr:colName:H_gamma_err print:T label:H_gamma
+wl:4101.74 continuum_left:[4050.,4060.] continuum_right:[4125.,4235.] lum:colName:H_delta_flux lumErr:colName:H_delta_err print:T label:H_delta

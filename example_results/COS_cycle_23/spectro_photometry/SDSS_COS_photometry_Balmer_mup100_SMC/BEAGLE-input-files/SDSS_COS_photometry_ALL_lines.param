@@ -1,0 +1,190 @@
+[main]
+# Verbose mode: 0 ---> no info, 1 ----> print only errors, 2 ---> print errors and warnings, 3 ----> print errors, warnings and info 
+VERBOSE = 1
+
+DEBUG MODE = F
+DEBUG ITERATIONS = 400
+
+# Seed for the random number generator
+SEED = -1
+
+#****************************************************************
+# ******************* COSMOLOGICAL PARAMETERS *******************
+#****************************************************************
+#
+HUBBLE_0 = 67.8
+
+OMEGA_MATTER = 0.308
+
+OMEGA_LAMBDA = 0.692
+
+#****************************************************************
+# ******************* TEMPLATES  *****************************
+#****************************************************************
+
+#TEMPLATES = $BEAGLE_TEMPLATES/cb15/cb2013_s2_chab_hr_xmiless_ssp
+TEMPLATES NEBULAR = $BEAGLE_TEMPLATES/ineb_June16/mup100/cb2016_n2_mup100_N015_O01_deplO70_C100_June16
+EMISSION LINES CONFIGURATION = $BEAGLE_TEMPLATES/ineb_June16/mup100/cb2016_n2_mup100_N015_O01_deplO70_C100_Jan16_line_wavelengths_may2017.dat
+ 
+TEMPLATES ALPHA ELEMENTS =
+ALPHA DIFFERENTIAL =
+
+#SHRINK TEMPLATES WL RANGE = 
+#REBIN TEMPLATES = 5
+
+#****************************************************************
+# ******************* PHOTOMETRY *****************************
+#****************************************************************
+
+FILTERS THROUGHPUTS = /Users/jchevall/Coding/BEAGLE-general/filters/photometric_filters_curves.fits
+
+FILTERS CONFIGURATION = /Users/jchevall/People/Senchyna/spectro_photometry/filters_Senchyna_SDSS_COS.dat
+
+PHOTOMETRIC CATALOGUE = /Users/jchevall/People/Senchyna/sedfit_ew_gr_err_fake_dL_COS_photometry_Gal_extinction.fits
+
+PRIORS CATALOGUE = /Users/jchevall/People/Senchyna/UV_optical_EL/nebfit_sdss_galcorr_scaled_err_H8_subtracted.fits
+
+#****************************************************************
+# ******************* SPECTROSCOPY *****************************
+#****************************************************************
+
+SPECTRAL INDICES CONFIGURATION = /Users/jchevall/People/Senchyna/spectro_photometry/optical_Balmer.dat
+
+SPECTRAL INDICES CATALOGUE = /Users/jchevall/People/Senchyna/UV_optical_EL/nebfit_sdss_galcorr_scaled_err_H8_subtracted.fits
+
+# Example: FITS table
+#SPECTRUM FILE DESCRIPTION =   wl:colName:wl flux:colName:flux  fluxerr:colName:flux_err     mask:colName:mask
+
+# Need to mask any region from observations?
+# (For instance because of bas sky subtraction, unre;oiabel flux calibrations, etc...)
+# MASK OBSERVATION REGIONS = range-1:[5700, 5900.] range-2:[6500., -1.]
+
+
+# Need to mask any region from the templates?
+# (For instance because of different resolutions, use of empirical/theoretical stellar libraries)
+#MASK TEMPLATE REGIONS = range-1:[-1., 3300.] range-2:[6500., -1.]
+
+# How do you treat continuum mis-calibrations between observed and model spectra?
+# - rectify --->
+# - polynomial --->
+#FLUX CALIBRATION CORRECTION = type:legendre degree:3
+#FLUX CALIBRATION CORRECTION = type:rectify
+
+# Do you want to mask emission lines?
+MASK EMISSION LINES = F
+
+# Do you want to mask bad sky subtraction?
+MASK BAD SKY = F
+
+#****************************************************************
+# ******************* MOCK OBSERVATIONS *****************************
+#****************************************************************
+
+#MOCK SPECTRUM WL RANGE = 3500. 5400.
+#MOCK SPECTRUM S/N = 20.
+
+# Whether to print FITS file containing mock spectra and photometry, one file per object
+#PRINT MOCK PHOTOMETRY = F
+#PRINT MOCK SPECTRUM = T
+
+#N_OBJECTS = 10
+
+#****************************************************************
+# ******************* DUST ATTENUATION AND IGM ABSORPTION *******
+#****************************************************************
+#
+
+IGM ABSORPTION = Inoue
+
+# File containing set of radiativa transfer (RT) calculations of dust attenuation of starlight
+#RT CALCULATIONS = Tuffs_bulge_NEW-28-11.dat Tuffs_thick_NEW-28-11.dat Tuffs_thin_NEW-28-11.dat
+#RT COMPONENTS NAMES = bulge thick_disc thin_disc
+
+#****************************************************************
+# ******************* STAR FORMATION *****************************
+#****************************************************************
+
+# File containing a library of star formation histories from semi-analytic models
+# SEMI-ANALYTIC STAR FORMATION = /Users/jacopo/bc99lx/Mock/F90/list9sfh_TOT.bin
+# SEMI-ANALYTIC STAR FORMATION = /tmp_mnt/broque/poubelle1/tmp/chevalla/Mock/F90/list9sfh_TOT.bin
+# If "STAR FORMATION HISTORY = 3" filename containing the user supplied SFH
+#SIMULATED SF AND ChE HISTORIES = $BANGS_SF_ChE/Blaizot/Joao-refSim-z1/Joao-refSim-z1.sfh
+
+# Whether you want to use the simulated SF and ChE histories in the order in which they are read, 
+# or rather you want ot randomize this order
+#RANDOMIZE SIMULATED SF AND ChE = T
+
+# File containing a user supplied SF and ChE history, i.e. (at least) 3 columns age, SFR and Z
+#USER SUPPLIED SFH = output.my_sfr
+
+# Normalize the mass formed to 1 M_sun ? this means that all SED will be rescaled so as M_star + M_gas = M_tot = 1
+#NORMALIZE TO 1 M_SUN = T
+
+# If you model the star formation and chemical enrichment history of galaxies in a non parametric way, 
+# then you can describe the SF and CE history my computing the mass and mass-weighted metallicity in 
+# different age bins.
+
+# **************************************************
+# ************** SF BIN #1 **************************
+# **************************************************
+SF_PARAMETER  = name:sfh_type                 type:fixed    char_value:constant
+
+# in log(Z/Z_sun)
+SF_PARAMETER  = name:metallicity              type:fitted   order_priority:1  prior:distribution:uniform  prior:range:[-2.2,0.25] 
+
+# In log M/M_sun
+SF_PARAMETER  = name:mass                     type:fitted   order_priority:0  prior:distribution:uniform  prior:range:[0.,10.]   
+
+# In log(yr)
+SF_PARAMETER  = name:max_stellar_age   type:fitted   order_priority:1  prior:distribution:gaussian  prior:mean:7.5 prior:sigma:1.5  prior:range:[6.0, 10.15]
+
+# **************************************************
+# **************  OTHER SF PARAMETERS **************************
+# **************************************************
+#
+
+# In log(M_sun/yr)
+#SF_PARAMETER  = name:sfr                      type:fitted  order_priority:1   prior:distribution:gaussian prior:mean:-1.0 prior:sigma:2.  prior:range:[-4.0,4.0]
+
+# in log(yr)
+#SF_PARAMETER  = name:current_sfr_timescale        type:fixed  value:7.
+
+#****************************************************************
+# ******************* PRINTED OUTPUT  *****************************
+#****************************************************************
+
+RESULTS DIRECTORY = /Users/jchevall/People/Senchyna/spectro_photometry/SDSS_COS_photometry_Balmer_mup100_SMC
+
+#MOCK CATALOGUE NAME = test
+
+PRINT PHOTOMETRY = T
+PRINT SPECTRUM = T
+PRINT SPECTRAL INDICES = T
+PRINT SF AND ChE HISTORIES = F
+
+#****************************************************************
+# ******************* PARAMETERS HANDLING  *****************************
+#****************************************************************
+
+
+PDF SAMPLER FILE = $BEAGLE_PARAM_DIR/MCMC_Stark.param
+
+PARAMETER  = name:luminosity_distance   type:fitted  prior:distribution:dirac  prior:colName:dist
+
+PARAMETER  = name:formation_redshift        type:fixed   value:15.0
+
+PARAMETER  = name:redshift   type:fitted  prior:distribution:dirac  prior:colName:z
+
+PARAMETER  = name:nebular_logU    type:fitted  order_priority:1  prior:distribution:uniform   prior:range:[-4.,-1.]   
+
+PARAMETER  = name:nebular_xi                type:fixed  value:0.3
+
+PARAMETER  = name:nebular_Z                 type:dependent
+
+#PARAMETER  = name:nebular_CO                 type:fitted prior:distribution:uniform   prior:range:[0.1, 1.0]
+
+PARAMETER  = name:attenuation_type  type:fixed    char_value:SMC   # values can be: CF00, Calzetti, CCWW13_universal, CCWW13_full
+
+PARAMETER  = name:tauv_eff        type:fitted   order_priority:0  prior:distribution:exponential   prior:range:[0.,2.]   
+
+#PARAMETER  = name:mu              type:fixed      value:0.4
