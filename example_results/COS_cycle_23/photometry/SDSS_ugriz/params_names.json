@@ -1,0 +1,25 @@
+{
+
+"mass": {
+  "range": [3.0, 10.0],
+  "label": "$\\log (\\textnormal{M} / \\textnormal{M}_\\odot)$"
+},
+
+"max_stellar_age": {
+  "range": [5.0, 10.15],
+  "label": "$\\log (t/\\textnormal{yr})$"
+},
+
+"tauv_eff": {
+  "range": [0.0, 5.0],
+  "label": "$\\hat{\\tau}_V$"
+},
+
+"logOH": {
+  "range": [6.41, 9.24],
+  "label": "$\\log (\\textnormal{O}/\\textnormal{H})$",
+  "extName": "HII EMISSION"
+}
+
+} 
+   

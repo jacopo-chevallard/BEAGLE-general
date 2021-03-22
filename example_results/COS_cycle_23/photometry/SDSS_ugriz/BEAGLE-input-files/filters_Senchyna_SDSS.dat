@@ -1,0 +1,20 @@
+# It contains the filters to be used when calculating only photmetric models
+
+# If the catalogue contains spec-z you add the following line
+# redshift:colName:<redshift column name>
+# Example -------> redshift:colName:Z_EAZY
+
+# The possible units that can be used are: Jy, milliJy, microJy, nanoJy
+# Alternatively one can pass a conversion factor to convert the fluxes in the
+# catalogue into [erg s^-1 cm^-2 Hz^-1] -----> flux:conversion:<conversion factor>
+units:milliJy
+
+object_ID:colName:sbid
+
+#index:139  min_rel_err:0.02   flux:colName:FUV      fluxerr:colName:FUV_err   label:galex_fuv
+#index:140  min_rel_err:0.02   flux:colName:NUV     fluxerr:colName:NUV_err   label:galex_nuv
+name:SDSS_filter_u     min_rel_err:0.02    flux:colName:u_prime   fluxErr:colName:u_prime_err    fileName:/Users/jchevall/Coding/BEAGLE-general/filters/sdss_u.dat       
+name:SDSS_filter_g     min_rel_err:0.02    flux:colName:g_prime   fluxErr:colName:g_prime_err    fileName:/Users/jchevall/Coding/BEAGLE-general/filters/sdss_g.dat       
+name:SDSS_filter_r     min_rel_err:0.02    flux:colName:r_prime   fluxErr:colName:r_prime_err    fileName:/Users/jchevall/Coding/BEAGLE-general/filters/sdss_r.dat       
+name:SDSS_filter_i     min_rel_err:0.02    flux:colName:i_prime   fluxErr:colName:i_prime_err    fileName:/Users/jchevall/Coding/BEAGLE-general/filters/sdss_i.dat       
+name:SDSS_filter_z     min_rel_err:0.02    flux:colName:z_prime   fluxErr:colName:z_prime_err    fileName:/Users/jchevall/Coding/BEAGLE-general/filters/sdss_z.dat       

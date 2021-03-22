@@ -42,13 +42,9 @@ REBIN TEMPLATES = 10
 # ******************* PHOTOMETRY *****************************
 #****************************************************************
 
-FILTERS THROUGHPUTS = /Users/jchevall/Coding/BEAGLE-general/filters/photometric_filters_curves.fits
+FILTERS CONFIGURATION = $BEAGLE_GENERAL/example_results/COS_cycle_23/photometry/SDSS_ugriz/BEAGLE-input-files/filters_Senchyna_SDSS.dat
 
-FILTERS CONFIGURATION = /Users/jchevall/People/Senchyna/filters_Senchyna_SDSS.dat
-
-PHOTOMETRIC CATALOGUE = /Users/jchevall/People/Senchyna/sedfit_ew_gr_err_fake_dL.fits
-
-MOCK INPUT PARAMETERS = fileName:/Users/jchevall/People/Senchyna/sedfit_ew_gr_err_fake_dL.fits
+PHOTOMETRIC CATALOGUE = $BEAGLE_GENERAL/example_results/COS_cycle_23/photometry/SDSS_ugriz/BEAGLE-input-files/sedfit_ew_gr_err_fake_dL.fits
 
 #****************************************************************
 # ******************* SPECTROSCOPY *****************************
@@ -167,7 +163,7 @@ SF_PARAMETER  = name:max_stellar_age   type:fitted   order_priority:1  prior:dis
 # ******************* PRINTED OUTPUT  *****************************
 #****************************************************************
 
-RESULTS DIRECTORY = /Users/jchevall/People/Senchyna/photometry/SDSS_ugriz
+RESULTS DIRECTORY = $BEAGLE_GENERAL/example_results/COS_cycle_23/photometry/SDSS_ugriz
 
 #MOCK CATALOGUE NAME = test
 
@@ -181,7 +177,7 @@ PRINT SF AND ChE HISTORIES = F
 #****************************************************************
 
 
-PDF SAMPLER FILE = $BEAGLE_PARAM_DIR/MCMC_rapid.param
+PDF SAMPLER FILE = $BEAGLE_GENERAL/example_results/COS_cycle_23/photometry/SDSS_ugriz/BEAGLE-input-files/MCMC_rapid.param
 
 
 PARAMETER  = name:luminosity_distance   type:from_file
