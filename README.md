@@ -1,4 +1,4 @@
-[![Join the chat at https://gitter.im/jacopo-chevallard/BEAGLE-JWST-GTO](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jacopo-chevallard/BEAGLE-JWST-GTO?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![](https://badgen.net/badge/icon/Join%20us%20on%20Slack?icon=slack&label)]([[https://kubernetes.slack.com/messages/C87MF1RFD](https://join.slack.com/t/beaglenewusers/shared_invite/zt-2e0o2e9jr-tqMrNLGDb1Q40V9l8pPZ2A)](https://join.slack.com/t/beaglenewusers/shared_invite/zt-2e0o2e9jr-tqMrNLGDb1Q40V9l8pPZ2A))
 
 # BEAGLE-general
 
