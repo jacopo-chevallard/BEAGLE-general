@@ -2,15 +2,10 @@
 
 # BEAGLE-general
 
-Used for tracking issues for users with no access to the BEAGLE private repository. Use [GitHub issues](https://github.com/jacopo-chevallard/BEAGLE-general/issues) to open a new issue. 
+This repository contains useful files and examples to get started with Beagle. 
 
-
-Contains example files for:
-* producing a mock catalogue from analytic star-formation histories (BEAGLE_Docker_test_1.param)
-* producing a mock catalogue using 'from_file' option (BEAGLE_mock_catalogue_from_file.param)
-* fitting photometry (fit_photometry_example.param)
-* - to be included - *fitting a spectrum (fit_spectrum_example.param)*
+Please, if you have question do explore (closed and open) [issues](https://github.com/jacopo-chevallard/BEAGLE-general/issues) before opening a new one. 
 
 ## Beagle ChangeLog
 
-From here you can access the [Beagle ChangeLog](https://beagle.netlify.com/), which tracks all changes that are incrorporated into the new releases published through [DockerHub](https://cloud.docker.com/u/beagletool/repository/docker/beagletool/beagle)  
+Visit the [Beagle ChangeLog](https://beagle.netlify.com/) to see all changes of the different Beagle versions, which are released on [DockerHub](https://hub.docker.com/r/beagletool/beagle/tags/)  
