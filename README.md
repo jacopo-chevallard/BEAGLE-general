@@ -2,9 +2,7 @@
 
 # BEAGLE-general
 
-This repository contains useful files and examples to get started with Beagle. 
-
-Please, if you have question do explore (closed and open) [issues](https://github.com/jacopo-chevallard/BEAGLE-general/issues) before opening a new one. 
+This repository contains useful files and examples to get started with the Beagle galaxy spectral modelling tool. 
 
 ## Registering before using Beagle
 
@@ -13,6 +11,10 @@ If you are intersted in using Beagle, please register on the [Beagle homepage](h
 ## Terms of Use
 
 Please, read carefully [Beagle's Terms of Use](https://github.com/jacopo-chevallard/BEAGLE-general/blob/master/Terms%20of%20Use.md) before using the software.
+
+## Questions
+
+If you have questions, please explore (closed and open) [issues](https://github.com/jacopo-chevallard/BEAGLE-general/issues) before opening new ones. 
 
 ## Beagle ChangeLog
 
