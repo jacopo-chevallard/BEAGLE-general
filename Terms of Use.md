@@ -15,7 +15,7 @@ Beagle users agree to cite relevant publications in any work that used Beagle:
 - Calzetti et al. (1994) [if using ‘attenuation_type=calzetti’];
 - Charlot & Fall (2000) [if using ‘attenuation_type=cf00’];
 - Charlot & Fall (2000) and Chevallard et al.(2013) [if using ‘attenuation_type=ccww13_universal’].
-### 2.3 User registration
+### 2.3 Individual user registration
 Each Beagle user shall register individually from the Beagle [homepage](https://www.iap.fr/beagle/). This enables us to communicate with Beagle users about any bug fix and new feature.
 
 ## 3. Disclaimer of Warranty
